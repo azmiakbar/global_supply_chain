@@ -1,28 +1,62 @@
 # Sistem Monitoring Risiko Global Supply Chain
 
-Sistem monitoring risiko global supply chain berbasis Laravel untuk memantau aktivitas ekspor dan impor secara otomatis.
+Sistem berbasis Laravel untuk memantau risiko pada rantai pasok global melalui data negara, pelabuhan, pengiriman, ekonomi, cuaca, dan berita internasional.
 
 ## Deskripsi
 
-Aplikasi ini membantu perusahaan memantau berbagai faktor yang mempengaruhi pengiriman internasional, seperti:
+Proyek ini dikembangkan sebagai tugas akhir mata kuliah dengan tujuan membantu pengguna memantau faktor-faktor yang memengaruhi aktivitas ekspor dan impor antar negara.
 
-* Estimasi waktu kedatangan barang.
-* Perubahan nilai tukar mata uang.
-* Kondisi cuaca di lokasi pengiriman.
-* Kondisi pelabuhan dan kemacetan logistik.
-* Risiko geopolitik dan ekonomi.
-* Visualisasi data menggunakan grafik dan peta interaktif.
+Fokus utama sistem meliputi:
 
-## Fitur Utama
+* Manajemen negara dan pelabuhan internasional.
+* Monitoring data pengiriman barang.
+* Penyimpanan data risiko supply chain.
+* Monitoring berita internasional.
+* Penyimpanan daftar negara favorit pengguna.
+* Pengelolaan artikel analisis oleh administrator.
 
-* Manajemen negara tujuan dan asal.
-* Manajemen pelabuhan internasional.
-* Manajemen data barang impor dan ekspor.
-* Monitoring pengiriman barang.
-* Dashboard risiko supply chain.
-* Visualisasi data menggunakan Chart.js.
-* Peta lokasi menggunakan Leaflet.js.
-* Integrasi API cuaca, kurs mata uang, dan berita ekonomi.
+## Fitur yang Sudah Dibuat
+
+### Database dan Model
+
+* Countries
+* Ports
+* Items
+* Shipments
+* Risk Scores
+* Watchlists
+* News Caches
+* Articles
+
+### Relasi Data
+
+* Country memiliki banyak Port.
+* Item memiliki banyak Shipment.
+* Shipment terhubung dengan negara asal, negara tujuan, pelabuhan asal, dan pelabuhan tujuan.
+* User dapat memiliki banyak Watchlist.
+* Country dapat memiliki banyak data Risk Score dan News Cache.
+
+### Informasi Negara
+
+Data negara telah mendukung penyimpanan:
+
+* Nama negara
+* Kode negara
+* Mata uang
+* Bahasa
+* Wilayah
+* Populasi
+* Bendera
+
+### Informasi Berita
+
+Data berita mendukung kategori:
+
+* Economy
+* Logistics
+* Trade
+* Shipping
+* Geopolitics
 
 ## Teknologi yang Digunakan
 
@@ -31,40 +65,43 @@ Aplikasi ini membantu perusahaan memantau berbagai faktor yang mempengaruhi peng
 * PHP 8
 * Laravel 12
 * MySQL
+* Eloquent ORM
 
 ### Frontend
 
+* Blade Template Engine
 * Bootstrap 5
 * JavaScript
 * AJAX
 
-### Visualisasi
+### Visualisasi (Rencana Implementasi)
 
 * Chart.js
 * Leaflet.js
+* OpenStreetMap
 
-### Deployment
+## Integrasi API (Rencana Implementasi)
 
-* GitHub
-* Docker
-
-### API
-
+* REST Countries API
 * Open-Meteo API
 * World Bank API
-* REST Countries API
 * Exchange Rate API
 * GNews API
-* OpenStreetMap
+* Marine Traffic API atau sumber data alternatif
 
 ## Struktur Database
 
-Tabel utama:
+Tabel yang telah dibuat:
 
+* users
 * countries
 * ports
 * items
 * shipments
+* risk_scores
+* watchlists
+* news_caches
+* articles
 
 ## Pengembang
 

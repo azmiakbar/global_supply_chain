@@ -11,6 +11,7 @@ class Country extends Model
         'name',
         'code',
         'currency',
+        'language',
         'region',
         'population',
         'flag',
