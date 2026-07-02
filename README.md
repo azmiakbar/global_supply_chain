@@ -1,108 +1,121 @@
 # Sistem Monitoring Risiko Global Supply Chain
 
-Sistem berbasis Laravel untuk memantau risiko pada rantai pasok global melalui data negara, pelabuhan, pengiriman, ekonomi, cuaca, dan berita internasional.
+Sistem berbasis Laravel untuk memantau risiko pada rantai pasok global melalui integrasi data negara, ekonomi, cuaca, kurs mata uang, dan berita internasional.
 
 ## Deskripsi
 
-Proyek ini dikembangkan sebagai tugas akhir mata kuliah dengan tujuan membantu pengguna memantau faktor-faktor yang memengaruhi aktivitas ekspor dan impor antar negara.
+Proyek ini dikembangkan sebagai tugas mata kuliah untuk membantu monitoring aktivitas ekspor dan impor antar negara.
 
-Fokus utama sistem meliputi:
+Tahap pengembangan saat ini difokuskan pada penyediaan master data negara sebagai fondasi untuk integrasi API dan fitur monitoring berikutnya.
 
-* Manajemen negara dan pelabuhan internasional.
-* Monitoring data pengiriman barang.
-* Penyimpanan data risiko supply chain.
-* Monitoring berita internasional.
-* Penyimpanan daftar negara favorit pengguna.
-* Pengelolaan artikel analisis oleh administrator.
+---
 
-## Fitur yang Sudah Dibuat
+## Progress Saat Ini
 
-### Database dan Model
+### ✅ Master Data Negara
 
-* Countries
-* Ports
-* Items
-* Shipments
-* Risk Scores
-* Watchlists
-* News Caches
-* Articles
+Fitur yang telah berhasil dibuat:
 
-### Relasi Data
+- Migration tabel `countries`
+- Model `Country`
+- Controller `CountryController`
+- REST API `GET /api/countries`
+- Laravel Seeder untuk import data negara
+- Dataset 250 negara dunia
+- Pencegahan data duplikat menggunakan `updateOrCreate()`
 
-* Country memiliki banyak Port.
-* Item memiliki banyak Shipment.
-* Shipment terhubung dengan negara asal, negara tujuan, pelabuhan asal, dan pelabuhan tujuan.
-* User dapat memiliki banyak Watchlist.
-* Country dapat memiliki banyak data Risk Score dan News Cache.
+---
 
-### Informasi Negara
+## Informasi Negara
 
-Data negara telah mendukung penyimpanan:
+Data negara yang tersedia saat ini meliputi:
 
-* Nama negara
-* Kode negara
-* Mata uang
-* Bahasa
-* Wilayah
-* Populasi
-* Bendera
+- Nama negara
+- Kode negara (ISO 2)
+- Mata uang
+- Bahasa utama
+- Wilayah
+- Bendera negara
 
-### Informasi Berita
+Data populasi, GDP, inflasi, ekspor, dan impor akan diintegrasikan melalui World Bank API pada tahap pengembangan berikutnya.
 
-Data berita mendukung kategori:
+---
 
-* Economy
-* Logistics
-* Trade
-* Shipping
-* Geopolitics
+## REST API
+
+### GET /api/countries
+
+Mengembalikan daftar 250 negara dalam format JSON.
+
+Contoh request:
+
+```http
+GET /api/countries
+```
+
+---
 
 ## Teknologi yang Digunakan
 
 ### Backend
 
-* PHP 8
-* Laravel 12
-* MySQL
-* Eloquent ORM
+- PHP 8.2
+- Laravel 12
+- MySQL
+- Eloquent ORM
+- REST API
 
-### Frontend
+### Frontend (Tahap Berikutnya)
 
-* Blade Template Engine
-* Bootstrap 5
-* JavaScript
-* AJAX
+- Blade Template Engine
+- Bootstrap 5
+- JavaScript
+- AJAX
 
-### Visualisasi (Rencana Implementasi)
+---
 
-* Chart.js
-* Leaflet.js
-* OpenStreetMap
+## Integrasi API
 
-## Integrasi API (Rencana Implementasi)
+### Sudah Digunakan
 
-* REST Countries API
-* Open-Meteo API
-* World Bank API
-* Exchange Rate API
-* GNews API
-* Marine Traffic API atau sumber data alternatif
+- Dataset negara dunia melalui Laravel Seeder.
+
+### Akan Diintegrasikan
+
+- World Bank API
+- Open-Meteo API
+- Exchange Rate API
+- GNews API
+
+---
 
 ## Struktur Database
 
 Tabel yang telah dibuat:
 
-* users
-* countries
-* ports
-* items
-* shipments
-* risk_scores
-* watchlists
-* news_caches
-* articles
+- users
+- countries
+- ports
+- items
+- shipments
+- risk_scores
+- watchlists
+- news_caches
+- articles
+
+Saat ini, modul yang telah diimplementasikan dan digunakan adalah modul **Countries**. Tabel lainnya masih akan dikembangkan pada tahap berikutnya.
+
+---
+
+## Catatan Pengembangan
+
+- Data negara menggunakan Laravel Seeder sesuai arahan dosen.
+- Endpoint `GET /api/countries` telah tersedia dan mengembalikan data dalam format JSON.
+- Data ekonomi seperti populasi, GDP, inflasi, ekspor, dan impor akan diperoleh melalui World Bank API.
+- Pengembangan berikutnya akan difokuskan pada integrasi API eksternal dan dashboard monitoring.
+
+---
 
 ## Pengembang
 
-Azmi Akbar Nauli Dalimunthe
+**Azmi Akbar Nauli Dalimunthe**

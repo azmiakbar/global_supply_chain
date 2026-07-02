@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Country;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 
 class CountryController extends Controller
 {
@@ -13,6 +14,25 @@ class CountryController extends Controller
     public function index()
     {
         //
+    }
+
+    public function importCountries()
+    {
+        $response = Http::withHeaders([
+            'User-Agent' => 'GlobalSupplyChain/1.0'
+        ])->get(
+            'https://restcountries.com/api/v1/all'
+        );
+        
+        return response()->json([
+            'status' => $response->status(),
+            'body' => $response->body(),
+        ]);
+    }
+
+    public function apiIndex()
+    {
+        return Country::all();
     }
 
     /**
