@@ -1,43 +1,63 @@
 # Sistem Monitoring Risiko Global Supply Chain
 
-Sistem berbasis Laravel untuk memantau risiko pada rantai pasok global melalui integrasi data negara, ekonomi, cuaca, kurs mata uang, dan berita internasional.
+Sistem berbasis Laravel untuk pengelolaan data negara dan logistics nodes sebagai fondasi monitoring rantai pasok global.
 
 ## Deskripsi
 
-Proyek ini dikembangkan sebagai tugas mata kuliah untuk membantu monitoring aktivitas ekspor dan impor antar negara.
-
-Tahap pengembangan saat ini difokuskan pada penyediaan master data negara sebagai fondasi untuk integrasi API dan fitur monitoring berikutnya.
+Proyek ini dikembangkan sebagai tugas mata kuliah dengan fokus pada penyediaan data master negara dan lokasi logistik internasional yang akan digunakan pada tahap pengembangan berikutnya.
 
 ---
 
-## Progress Saat Ini
+## Fitur yang Sudah Dibuat
 
-### ✅ Master Data Negara
-
-Fitur yang telah berhasil dibuat:
+### Master Data Negara
 
 - Migration tabel `countries`
 - Model `Country`
 - Controller `CountryController`
 - REST API `GET /api/countries`
-- Laravel Seeder untuk import data negara
-- Dataset 250 negara dunia
-- Pencegahan data duplikat menggunakan `updateOrCreate()`
+- Laravel Seeder data negara
+- 250 negara dunia
+
+Informasi yang tersedia:
+
+- Nama negara
+- Kode ISO
+- Mata uang
+- Bahasa
+- Wilayah
+- Bendera
 
 ---
 
-## Informasi Negara
+### Master Data Logistics Nodes
 
-Data negara yang tersedia saat ini meliputi:
+- Migration tabel `ports`
+- Penambahan kolom `code`
+- Penambahan kolom `transport_type`
+- Model `Port`
+- Controller `PortController`
+- REST API `GET /api/ports`
+- Laravel Seeder menggunakan dataset UN/LOCODE
+- Relasi `Port -> Country`
+- Pagination 100 data per halaman
 
-- Nama negara
-- Kode negara (ISO 2)
-- Mata uang
-- Bahasa utama
-- Wilayah
-- Bendera negara
+Data yang berhasil diimpor:
 
-Data populasi, GDP, inflasi, ekspor, dan impor akan diintegrasikan melalui World Bank API pada tahap pengembangan berikutnya.
+- 26.622 logistics nodes
+- Seaport
+- Airport
+- Dry Port
+
+Informasi yang disimpan:
+
+- Kode UN/LOCODE
+- Nama lokasi
+- Negara
+- Latitude
+- Longitude
+- Status
+- Jenis transportasi
 
 ---
 
@@ -47,45 +67,27 @@ Data populasi, GDP, inflasi, ekspor, dan impor akan diintegrasikan melalui World
 
 Mengembalikan daftar 250 negara dalam format JSON.
 
-Contoh request:
-
 ```http
 GET /api/countries
+```
+
+### GET /api/ports
+
+Mengembalikan daftar logistics nodes dengan pagination.
+
+```http
+GET /api/ports
 ```
 
 ---
 
 ## Teknologi yang Digunakan
 
-### Backend
-
 - PHP 8.2
 - Laravel 12
 - MySQL
 - Eloquent ORM
 - REST API
-
-### Frontend (Tahap Berikutnya)
-
-- Blade Template Engine
-- Bootstrap 5
-- JavaScript
-- AJAX
-
----
-
-## Integrasi API
-
-### Sudah Digunakan
-
-- Dataset negara dunia melalui Laravel Seeder.
-
-### Akan Diintegrasikan
-
-- World Bank API
-- Open-Meteo API
-- Exchange Rate API
-- GNews API
 
 ---
 
@@ -103,16 +105,12 @@ Tabel yang telah dibuat:
 - news_caches
 - articles
 
-Saat ini, modul yang telah diimplementasikan dan digunakan adalah modul **Countries**. Tabel lainnya masih akan dikembangkan pada tahap berikutnya.
-
 ---
 
-## Catatan Pengembangan
+## Modul yang Selesai
 
-- Data negara menggunakan Laravel Seeder sesuai arahan dosen.
-- Endpoint `GET /api/countries` telah tersedia dan mengembalikan data dalam format JSON.
-- Data ekonomi seperti populasi, GDP, inflasi, ekspor, dan impor akan diperoleh melalui World Bank API.
-- Pengembangan berikutnya akan difokuskan pada integrasi API eksternal dan dashboard monitoring.
+- Countries
+- Ports
 
 ---
 

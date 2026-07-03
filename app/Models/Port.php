@@ -9,10 +9,12 @@ class Port extends Model
 {
     protected $fillable = [
         'country_id',
+        'code',
         'name',
         'latitude',
         'longitude',
         'status',
+        'transport_type',
     ];
 
     public function country(): BelongsTo
