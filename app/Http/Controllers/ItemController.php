@@ -12,7 +12,9 @@ class ItemController extends Controller
      */
     public function index()
     {
-        //
+        $items = Item::orderBy('id')->get();
+        
+        return view('items.index', compact('items'));
     }
 
     /**
@@ -20,7 +22,7 @@ class ItemController extends Controller
      */
     public function create()
     {
-        //
+        return view('items.create');
     }
 
     /**
@@ -28,7 +30,24 @@ class ItemController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+        'name' => 'required',
+        'category' => 'required',
+        'weight' => 'required|numeric',
+        'price' => 'required|numeric',
+        'supplier' => 'required',
+        ]);
+        
+        Item::create([
+        'name' => $request->name,
+        'category' => $request->category,
+        'weight' => $request->weight,
+        'price' => $request->price,
+        'supplier' => $request->supplier,
+        ]);
+        
+        return redirect()->route('items.index')
+                     ->with('success', 'Item berhasil ditambahkan.');
     }
 
     /**
@@ -44,7 +63,7 @@ class ItemController extends Controller
      */
     public function edit(Item $item)
     {
-        //
+        return view('items.edit', compact('item'));
     }
 
     /**
@@ -52,7 +71,24 @@ class ItemController extends Controller
      */
     public function update(Request $request, Item $item)
     {
-        //
+        $request->validate([
+        'name' => 'required',
+        'category' => 'required',
+        'weight' => 'required|numeric',
+        'price' => 'required|numeric',
+        'supplier' => 'required',
+        ]);
+        
+        $item->update([
+        'name' => $request->name,
+        'category' => $request->category,
+        'weight' => $request->weight,
+        'price' => $request->price,
+        'supplier' => $request->supplier,
+        ]);
+        
+        return redirect()->route('items.index')
+                            ->with('success', 'Item berhasil diperbarui.');
     }
 
     /**
@@ -60,6 +96,9 @@ class ItemController extends Controller
      */
     public function destroy(Item $item)
     {
-        //
+        $item->delete();
+        
+        return redirect()->route('items.index')
+                            ->with('success', 'Item berhasil dihapus.');
     }
 }

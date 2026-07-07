@@ -1,119 +1,160 @@
-# Sistem Monitoring Risiko Global Supply Chain
+# 🌍 Global Supply Chain Monitoring System
 
-Sistem berbasis Laravel untuk pengelolaan data negara dan logistics nodes sebagai fondasi monitoring rantai pasok global.
-
-## Deskripsi
-
-Proyek ini dikembangkan sebagai tugas mata kuliah dengan fokus pada penyediaan data master negara dan lokasi logistik internasional yang akan digunakan pada tahap pengembangan berikutnya.
+Sistem Monitoring Risiko Global Supply Chain berbasis Laravel yang dikembangkan sebagai proyek akademik untuk membantu memantau proses pengiriman internasional, mengelola data master supply chain, serta menganalisis potensi risiko yang dapat memengaruhi distribusi barang.
 
 ---
 
-## Fitur yang Sudah Dibuat
+## 📖 About Project
 
-### Master Data Negara
+Global Supply Chain Monitoring System merupakan aplikasi berbasis web yang dibangun menggunakan Laravel. Sistem ini bertujuan untuk membantu pengelolaan data supply chain internasional melalui data negara, pelabuhan, barang (item), serta pengiriman (shipment).
 
-- Migration tabel `countries`
-- Model `Country`
-- Controller `CountryController`
-- REST API `GET /api/countries`
-- Laravel Seeder data negara
-- 250 negara dunia
-
-Informasi yang tersedia:
-
-- Nama negara
-- Kode ISO
-- Mata uang
-- Bahasa
-- Wilayah
-- Bendera
+Pada tahap pengembangan selanjutnya, sistem akan mendukung analisis risiko berdasarkan kondisi cuaca, perubahan nilai tukar mata uang, dan berita global menggunakan API eksternal.
 
 ---
 
-### Master Data Logistics Nodes
+## ✨ Current Features
 
-- Migration tabel `ports`
-- Penambahan kolom `code`
-- Penambahan kolom `transport_type`
-- Model `Port`
-- Controller `PortController`
-- REST API `GET /api/ports`
-- Laravel Seeder menggunakan dataset UN/LOCODE
-- Relasi `Port -> Country`
-- Pagination 100 data per halaman
+### ✅ Completed
 
-Data yang berhasil diimpor:
+- Database Design
+- Database Migration
+- Database Seeder
+- Countries Data
+- Ports Data (26,660+ Logistics Nodes)
+- Item Management (CRUD)
+  - View Item
+  - Add Item
+  - Edit Item
+  - Delete Item
 
-- 26.622 logistics nodes
-- Seaport
-- Airport
-- Dry Port
+### 🚧 In Progress
 
-Informasi yang disimpan:
+- Shipment Management Module
 
-- Kode UN/LOCODE
-- Nama lokasi
-- Negara
-- Latitude
-- Longitude
-- Status
-- Jenis transportasi
+### ⏳ Planned
 
----
-
-## REST API
-
-### GET /api/countries
-
-Mengembalikan daftar 250 negara dalam format JSON.
-
-```http
-GET /api/countries
-```
-
-### GET /api/ports
-
-Mengembalikan daftar logistics nodes dengan pagination.
-
-```http
-GET /api/ports
-```
+- Risk Score Calculation
+- Dashboard Monitoring
+- Weather API Integration
+- Currency API Integration
+- News API Integration
+- Interactive Map (Leaflet)
+- Statistics Dashboard (Chart.js)
 
 ---
 
-## Teknologi yang Digunakan
+## 🗄 Database Structure
 
-- PHP 8.2
-- Laravel 12
-- MySQL
-- Eloquent ORM
-- REST API
-
----
-
-## Struktur Database
-
-Tabel yang telah dibuat:
-
-- users
-- countries
-- ports
-- items
-- shipments
-- risk_scores
-- watchlists
-- news_caches
-- articles
-
----
-
-## Modul yang Selesai
+### Master Data
 
 - Countries
 - Ports
+- Items
+
+### Transaction Data
+
+- Shipments
+
+### Monitoring Data
+
+- Risk Scores
+- Watchlists
+- News Caches
+- Articles
 
 ---
 
-## Pengembang
+## 🛠 Technology Stack
+
+- Laravel 12
+- PHP 8.2
+- MySQL
+- Laragon
+- Bootstrap 5
+- JavaScript
+
+---
+
+## ⚙️ Installation
+
+Clone repository
+
+```bash
+git clone https://github.com/azmiakbar/global-supply-chain.git
+```
+
+Masuk ke folder project
+
+```bash
+cd global-supply-chain
+```
+
+Install dependency
+
+```bash
+composer install
+```
+
+Copy file environment
+
+```bash
+cp .env.example .env
+```
+
+Generate application key
+
+```bash
+php artisan key:generate
+```
+
+Jalankan migration
+
+```bash
+php artisan migrate
+```
+
+Jalankan seeder
+
+```bash
+php artisan db:seed
+```
+
+Menjalankan aplikasi
+
+```bash
+php artisan serve
+```
+
+---
+
+## 📊 Current Project Progress
+
+| Module | Status |
+|----------|:------:|
+| Laravel Setup | ✅ |
+| Database Design | ✅ |
+| Migration | ✅ |
+| Seeder | ✅ |
+| Countries Data | ✅ |
+| Ports Data | ✅ |
+| Item CRUD | ✅ |
+| Shipment Module |  |
+| Risk Score |  |
+| Dashboard |  |
+| API Integration |  |
+
+---
+
+## 📌 Current Database Statistics
+
+| Data | Total |
+|------|------:|
+| Countries | Available |
+| Ports | 26,660+ |
+| Items | CRUD Enabled |
+
+---
+
+## 👨‍💻 Developer
 
 **Azmi Akbar Nauli Dalimunthe**
