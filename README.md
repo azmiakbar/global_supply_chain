@@ -1,160 +1,143 @@
-# 🌍 Global Supply Chain Monitoring System
+# 🌍 Global Supply Chain Risk Intelligence Platform
 
-Sistem Monitoring Risiko Global Supply Chain berbasis Laravel yang dikembangkan sebagai proyek akademik untuk membantu memantau proses pengiriman internasional, mengelola data master supply chain, serta menganalisis potensi risiko yang dapat memengaruhi distribusi barang.
+Sistem monitoring risiko rantai pasok global berbasis web yang dikembangkan menggunakan Laravel.
 
----
-
-## 📖 About Project
-
-Global Supply Chain Monitoring System merupakan aplikasi berbasis web yang dibangun menggunakan Laravel. Sistem ini bertujuan untuk membantu pengelolaan data supply chain internasional melalui data negara, pelabuhan, barang (item), serta pengiriman (shipment).
-
-Pada tahap pengembangan selanjutnya, sistem akan mendukung analisis risiko berdasarkan kondisi cuaca, perubahan nilai tukar mata uang, dan berita global menggunakan API eksternal.
+Project ini dibuat sebagai Tugas Akhir mata kuliah Pemrograman Web.
 
 ---
 
-## ✨ Current Features
+# 📌 Fitur yang Telah Selesai
 
-### ✅ Completed
+## Authentication
 
-- Database Design
-- Database Migration
-- Database Seeder
-- Countries Data
-- Ports Data (26,660+ Logistics Nodes)
-- Item Management (CRUD)
-  - View Item
-  - Add Item
-  - Edit Item
-  - Delete Item
-
-### 🚧 In Progress
-
-- Shipment Management Module
-
-### ⏳ Planned
-
-- Risk Score Calculation
-- Dashboard Monitoring
-- Weather API Integration
-- Currency API Integration
-- News API Integration
-- Interactive Map (Leaflet)
-- Statistics Dashboard (Chart.js)
+- Login
+- Register
+- Logout
+- Profile Management
 
 ---
 
-## 🗄 Database Structure
+## Dashboard
 
-### Master Data
+Menampilkan informasi utama sistem berupa:
 
-- Countries
-- Ports
-- Items
-
-### Transaction Data
-
-- Shipments
-
-### Monitoring Data
-
-- Risk Scores
-- Watchlists
-- News Caches
-- Articles
+- Total Countries
+- Total Ports
+- Total Items
+- Total Shipments
+- Risk Summary
 
 ---
 
-## 🛠 Technology Stack
+## Countries
+
+Fitur yang tersedia:
+
+- Menampilkan daftar seluruh negara
+- Menampilkan detail setiap negara
+- Pagination
+- Flag negara
+
+---
+
+## Country Monitoring
+
+Setiap negara memiliki halaman monitoring yang menampilkan informasi secara real-time.
+
+### Country Information
+
+- Country Name
+- Flag
+- Capital
+- Currency
+- Language
+- Region
+- Population
+- Latitude
+- Longitude
+
+---
+
+### 🌦 Weather Monitoring
+
+Menggunakan **Open-Meteo API**
+
+Data yang ditampilkan:
+
+- Temperature
+- Humidity
+- Rain
+- Wind Speed
+
+---
+
+### 💱 Currency Monitoring
+
+Menggunakan **ExchangeRate API**
+
+Data yang ditampilkan:
+
+- Base Currency
+- Country Currency
+- Exchange Rate
+- Last Update
+
+---
+
+### 📈 Economy Monitoring
+
+Menggunakan **World Bank API**
+
+Data yang ditampilkan:
+
+- GDP
+- Inflation
+- Exports
+- Imports
+
+---
+
+# 🛠️ Teknologi
 
 - Laravel 12
 - PHP 8.2
 - MySQL
-- Laragon
 - Bootstrap 5
-- JavaScript
+- Blade
 
 ---
 
-## ⚙️ Installation
+# 🌐 API
 
-Clone repository
+### Open-Meteo
 
-```bash
-git clone https://github.com/azmiakbar/global-supply-chain.git
-```
+Digunakan untuk memperoleh data cuaca secara real-time.
 
-Masuk ke folder project
+### ExchangeRate API
 
-```bash
-cd global-supply-chain
-```
+Digunakan untuk memperoleh nilai tukar mata uang.
 
-Install dependency
+### World Bank API
 
-```bash
-composer install
-```
-
-Copy file environment
-
-```bash
-cp .env.example .env
-```
-
-Generate application key
-
-```bash
-php artisan key:generate
-```
-
-Jalankan migration
-
-```bash
-php artisan migrate
-```
-
-Jalankan seeder
-
-```bash
-php artisan db:seed
-```
-
-Menjalankan aplikasi
-
-```bash
-php artisan serve
-```
+Digunakan untuk memperoleh data ekonomi suatu negara.
 
 ---
 
-## 📊 Current Project Progress
+# 🚧 Progress Project
 
-| Module | Status |
-|----------|:------:|
-| Laravel Setup | ✅ |
-| Database Design | ✅ |
-| Migration | ✅ |
-| Seeder | ✅ |
-| Countries Data | ✅ |
-| Ports Data | ✅ |
-| Item CRUD | ✅ |
-| Shipment Module |  |
-| Risk Score |  |
-| Dashboard |  |
-| API Integration |  |
+- ✅ Authentication
+- ✅ Dashboard
+- ✅ Countries
+- ✅ Weather API
+- ✅ Currency API
+- ✅ World Bank API
+- ⏳ News API
+- ⏳ Risk Score
+- ⏳ Interactive Map
+- ⏳ Watchlist
 
 ---
 
-## 📌 Current Database Statistics
-
-| Data | Total |
-|------|------:|
-| Countries | Available |
-| Ports | 26,660+ |
-| Items | CRUD Enabled |
-
----
-
-## 👨‍💻 Developer
+# 👨‍💻 Developer
 
 **Azmi Akbar Nauli Dalimunthe**

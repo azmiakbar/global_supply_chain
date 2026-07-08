@@ -3,83 +3,66 @@
 namespace App\Http\Controllers;
 
 use App\Models\Country;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
+use App\Services\WeatherService;
+use App\Services\CurrencyService;
+use App\Services\WorldBankService;
 
 class CountryController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    protected WeatherService $weatherService;
+    protected CurrencyService $currencyService;
+    protected WorldBankService $worldBankService;
+
+    public function __construct(
+        WeatherService $weatherService,
+        CurrencyService $currencyService,
+        WorldBankService $worldBankService
+    ) {
+        $this->weatherService = $weatherService;
+        $this->currencyService = $currencyService;
+        $this->worldBankService = $worldBankService;
+    }
+
     public function index()
     {
-        //
+        $countries = Country::orderBy('name')->paginate(20);
+
+        return view('countries.index', compact('countries'));
     }
 
-    public function importCountries()
-    {
-        $response = Http::withHeaders([
-            'User-Agent' => 'GlobalSupplyChain/1.0'
-        ])->get(
-            'https://restcountries.com/api/v1/all'
-        );
-        
-        return response()->json([
-            'status' => $response->status(),
-            'body' => $response->body(),
-        ]);
-    }
-
-    public function apiIndex()
-    {
-        return Country::all();
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
     public function show(Country $country)
     {
-        //
-    }
+        $weather = null;
+        $currency = null;
+        $economy = null;
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Country $country)
-    {
-        //
-    }
+        if ($country->latitude && $country->longitude) {
+            $weather = $this->weatherService->current(
+                (float) $country->latitude,
+                (float) $country->longitude
+            );
+        }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Country $country)
-    {
-        //
-    }
+        if ($country->currency) {
+            $currency = $this->currencyService->latest(
+                $country->currency
+            );
+        }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Country $country)
-    {
-        //
+        if ($country->code) {
+            $economy = $this->worldBankService->economy(
+                $country->code
+            );
+        }
+
+        return view(
+            'countries.show',
+            compact(
+                'country',
+                'weather',
+                'currency',
+                'economy'
+            )
+        );
     }
 }
