@@ -35,4 +35,14 @@ class DashboardController extends Controller
             'highRisk'
         ));
     }
+
+    public function map()
+    {
+        $shipments = Shipment::with([
+            'originCountry',
+            'destinationCountry'
+        ])->get();
+            
+        return view('map', compact('shipments'));
+    }
 }

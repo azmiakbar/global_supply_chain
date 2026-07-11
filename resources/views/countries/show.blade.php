@@ -208,85 +208,206 @@
         </div>
 
         {{-- ECONOMY --}}
-        @if($economy)
-        <div class="row text-center">
-            <div class="col-md-6 mb-3">
-                <div class="border rounded p-3">
-                    <h6>GDP</h6>
-                    <h5 class="text-primary">
-                        {{ $economy['gdp'] ? number_format($economy['gdp'],0) : '-' }}
-                    </h5>
-                </div>
-            </div>
-            <div class="col-md-6 mb-3">
-                <div class="border rounded p-3">
-                    <h6>Inflation</h6>
-                    <h5 class="text-danger">
-                        {{ $economy['inflation'] ? number_format($economy['inflation'],2).' %' : '-' }}
-                    </h5>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="border rounded p-3">
-                    <h6>Exports</h6>
-                    <h5 class="text-success">
-                        {{ $economy['exports'] ? number_format($economy['exports'],0) : '-' }}
-                    </h5>
-                </div>
-            </div>
-            <div class="col-md-6">
+<div class="card shadow mb-4">
 
-        <div class="border rounded p-3">
-            <h6>Imports</h6>
-            <h5 class="text-warning">
-                {{ $economy['imports'] ? number_format($economy['imports'],0) : '-' }}
-            </h5>
-        </div>
+    <div class="card-header bg-info text-white">
+        📈 Economy
     </div>
-</div>
-@else
-<div class="alert alert-warning mb-0">
-    Economy data unavailable.
-</div>
-@endif
 
-        {{-- NEWS --}}
-        <div class="card shadow mb-4">
+    <div class="card-body">
 
-            <div class="card-header bg-dark text-white">
-                📰 Latest News
-            </div>
+        @if($economy)
 
-            <div class="card-body">
+            <div class="row text-center">
 
-                <div class="alert alert-secondary mb-0">
+                <div class="col-md-6 mb-3">
 
-                    News API akan ditampilkan di sini.
+                    <div class="border rounded p-3">
+
+                        <h6>GDP</h6>
+
+                        <h5 class="text-primary">
+                            {{ $economy['gdp'] ? number_format($economy['gdp'],0) : '-' }}
+                        </h5>
+
+                    </div>
+
+                </div>
+
+                <div class="col-md-6 mb-3">
+
+                    <div class="border rounded p-3">
+
+                        <h6>Inflation</h6>
+
+                        <h5 class="text-danger">
+                            {{ $economy['inflation'] ? number_format($economy['inflation'],2).' %' : '-' }}
+                        </h5>
+
+                    </div>
+
+                </div>
+
+                <div class="col-md-6">
+
+                    <div class="border rounded p-3">
+
+                        <h6>Exports</h6>
+
+                        <h5 class="text-success">
+                            {{ $economy['exports'] ? number_format($economy['exports'],0) : '-' }}
+                        </h5>
+
+                    </div>
+
+                </div>
+
+                <div class="col-md-6">
+
+                    <div class="border rounded p-3">
+
+                        <h6>Imports</h6>
+
+                        <h5 class="text-warning">
+                            {{ $economy['imports'] ? number_format($economy['imports'],0) : '-' }}
+                        </h5>
+
+                    </div>
 
                 </div>
 
             </div>
 
-        </div>
+        @else
+
+            <div class="alert alert-warning mb-0">
+
+                Economy data unavailable.
+
+            </div>
+
+        @endif
+
+    </div>
+
+</div>
+
+{{-- NEWS --}}
+<div class="card shadow mb-4">
+
+    <div class="card-header bg-dark text-white">
+        📰 Latest News
+    </div>
+
+    <div class="card-body">
+
+        @if(count($news))
+
+            @foreach($news as $article)
+
+                <div class="mb-3 pb-3 border-bottom">
+
+                    <h6>
+                        {{ $article['title'] }}
+                    </h6>
+
+                    <p class="text-muted mb-2">
+
+                        {{ \Illuminate\Support\Str::limit($article['description'], 150) }}
+
+                    </p>
+
+                    <a href="{{ $article['url'] }}"
+                       target="_blank"
+                       class="btn btn-sm btn-primary">
+
+                        Read More
+
+                    </a>
+
+                </div>
+
+            @endforeach
+
+        @else
+
+            <div class="alert alert-secondary mb-0">
+
+                No news available.
+
+            </div>
+
+        @endif
+
+    </div>
+
+</div>
 
         {{-- RISK SCORE --}}
-        <div class="card shadow">
+<div class="card shadow">
 
-            <div class="card-header bg-danger text-white">
-                ⚠ Risk Score
+    <div class="card-header bg-danger text-white">
+
+        ⚠ Risk Score
+
+    </div>
+
+    <div class="card-body">
+
+        <table class="table table-bordered">
+
+            <tr>
+                <th>Weather</th>
+                <td>{{ $risk['weather'] }}</td>
+            </tr>
+
+            <tr>
+                <th>Currency</th>
+                <td>{{ $risk['currency'] }}</td>
+            </tr>
+
+            <tr>
+                <th>Economy</th>
+                <td>{{ $risk['economy'] }}</td>
+            </tr>
+
+            <tr>
+                <th>News</th>
+                <td>{{ $risk['news'] }}</td>
+            </tr>
+
+            <tr class="table-secondary">
+                <th>Total Score</th>
+                <th>{{ $risk['total'] }}</th>
+            </tr>
+
+        </table>
+
+        @if($risk['level']=='LOW')
+
+            <div class="alert alert-success text-center">
+
+                🟢 LOW RISK
+
             </div>
 
-            <div class="card-body">
+        @elseif($risk['level']=='MEDIUM')
 
-                <div class="alert alert-danger mb-0">
+            <div class="alert alert-warning text-center">
 
-                    Risk Score akan dihitung setelah seluruh API selesai diintegrasikan.
-
-                </div>
+                🟡 MEDIUM RISK
 
             </div>
 
-        </div>
+        @else
+
+            <div class="alert alert-danger text-center">
+
+                🔴 HIGH RISK
+
+            </div>
+
+        @endif
 
     </div>
 

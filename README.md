@@ -1,143 +1,201 @@
 # 🌍 Global Supply Chain Risk Intelligence Platform
 
-Sistem monitoring risiko rantai pasok global berbasis web yang dikembangkan menggunakan Laravel.
+## Deskripsi
 
-Project ini dibuat sebagai Tugas Akhir mata kuliah Pemrograman Web.
+Global Supply Chain Risk Intelligence Platform adalah aplikasi berbasis web yang dikembangkan menggunakan Laravel untuk membantu memantau pengiriman barang antar negara. Sistem ini menyediakan informasi monitoring negara, visualisasi jalur pengiriman, serta analisis risiko berdasarkan berbagai sumber data seperti cuaca, ekonomi, nilai tukar mata uang, dan berita.
+
+Project ini masih dalam tahap pengembangan sebagai Tugas Akhir mata kuliah Web Programming.
 
 ---
 
-# 📌 Fitur yang Telah Selesai
+# Fitur yang Telah Selesai
 
-## Authentication
+## 🔐 Authentication
 
 - Login
 - Register
 - Logout
-- Profile Management
+- Dashboard Authentication menggunakan Laravel Breeze
 
 ---
 
-## Dashboard
+## 🌍 Country Management
 
-Menampilkan informasi utama sistem berupa:
-
-- Total Countries
-- Total Ports
-- Total Items
-- Total Shipments
-- Risk Summary
-
----
-
-## Countries
-
-Fitur yang tersedia:
+Fitur yang telah tersedia:
 
 - Menampilkan daftar seluruh negara
-- Menampilkan detail setiap negara
-- Pagination
-- Flag negara
+- Pagination data negara
+- Menampilkan bendera negara
+- Menampilkan informasi:
+  - Nama Negara
+  - Ibu Kota
+  - Mata Uang
+  - Bahasa
+  - Region
+- Tombol Monitoring untuk setiap negara
 
 ---
 
-## Country Monitoring
+## 📦 Item Management
 
-Setiap negara memiliki halaman monitoring yang menampilkan informasi secara real-time.
+Fitur yang telah tersedia:
 
-### Country Information
+- Menampilkan daftar barang
+- Menambahkan barang
+- Mengubah data barang
+- Menghapus barang
 
-- Country Name
-- Flag
-- Capital
+---
+
+## 🚢 Shipment Management
+
+Fitur yang telah tersedia:
+
+- Menampilkan daftar shipment
+- Menambahkan shipment
+- Relasi dengan Item
+- Relasi dengan Country
+- Relasi dengan Port
+
+Data shipment yang disimpan meliputi:
+
+- Item
+- Origin Country
+- Destination Country
+- Origin Port
+- Destination Port
+- Quantity
+- Transport Type
+- Departure Date
+- Estimated Arrival
+- Status
+- Risk Level
+- Risk Score
+
+---
+
+## 🗺 Global Risk Map
+
+Visualisasi pengiriman menggunakan LeafletJS.
+
+Fitur yang telah tersedia:
+
+- Menampilkan lokasi shipment
+- Marker negara asal
+- Marker negara tujuan
+- Garis penghubung (Polyline)
+- Popup informasi shipment
+- Auto Zoom
+- Integrasi OpenStreetMap
+
+---
+
+## 📊 Country Monitoring
+
+Halaman monitoring negara telah tersedia dengan informasi:
+
+- Informasi Negara
+- Live Weather
+- Currency Monitoring
+- Economy Information
+- Latest News
+- Risk Score
+
+---
+
+## ⚠ Risk Analysis
+
+Sistem telah memiliki dasar analisis risiko melalui RiskService.
+
+Komponen yang digunakan antara lain:
+
+- Weather
 - Currency
-- Language
-- Region
-- Population
-- Latitude
-- Longitude
+- Economy
+- News
+
+Hasil analisis ditampilkan dalam bentuk:
+
+- Weather Score
+- Currency Score
+- Economy Score
+- News Score
+- Total Risk Score
+- Risk Level
 
 ---
 
-### 🌦 Weather Monitoring
+## 🔗 API Integration
 
-Menggunakan **Open-Meteo API**
+Beberapa service yang telah diintegrasikan:
 
-Data yang ditampilkan:
+- WeatherService
+- CurrencyService
+- WorldBankService
+- NewsService
+- RiskService
 
-- Temperature
-- Humidity
-- Rain
-- Wind Speed
-
----
-
-### 💱 Currency Monitoring
-
-Menggunakan **ExchangeRate API**
-
-Data yang ditampilkan:
-
-- Base Currency
-- Country Currency
-- Exchange Rate
-- Last Update
+Service tersebut digunakan untuk memperoleh data eksternal yang diperlukan pada halaman monitoring negara.
 
 ---
 
-### 📈 Economy Monitoring
+# Database Relationship
 
-Menggunakan **World Bank API**
+Relasi utama pada sistem:
 
-Data yang ditampilkan:
+Shipment
 
-- GDP
-- Inflation
-- Exports
-- Imports
+- belongsTo Item
+- belongsTo Origin Country
+- belongsTo Destination Country
+- belongsTo Origin Port
+- belongsTo Destination Port
+
+Port
+
+- belongsTo Country
+
+Country
+
+- hasMany Port
 
 ---
 
-# 🛠️ Teknologi
+# Teknologi
 
 - Laravel 12
 - PHP 8.2
 - MySQL
 - Bootstrap 5
-- Blade
+- Blade Template Engine
+- JavaScript
+- LeafletJS
+- OpenStreetMap
 
 ---
 
-# 🌐 API
+# Progress Project
 
-### Open-Meteo
+✅ Authentication
 
-Digunakan untuk memperoleh data cuaca secara real-time.
+✅ Dashboard
 
-### ExchangeRate API
+✅ Country Management
 
-Digunakan untuk memperoleh nilai tukar mata uang.
+✅ Item Management
 
-### World Bank API
+✅ Shipment Management
 
-Digunakan untuk memperoleh data ekonomi suatu negara.
+✅ Country Monitoring
 
----
+✅ Global Risk Map
 
-# 🚧 Progress Project
+✅ Risk Analysis
 
-- ✅ Authentication
-- ✅ Dashboard
-- ✅ Countries
-- ✅ Weather API
-- ✅ Currency API
-- ✅ World Bank API
-- ⏳ News API
-- ⏳ Risk Score
-- ⏳ Interactive Map
-- ⏳ Watchlist
+✅ API Integration
 
 ---
 
-# 👨‍💻 Developer
+# Developer
 
-**Azmi Akbar Nauli Dalimunthe**
+Azmi Akbar Nauli Dalimunthe

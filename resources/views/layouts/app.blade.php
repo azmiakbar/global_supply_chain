@@ -13,6 +13,21 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
 
+    <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
+
+    <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css"
+    />
+    
+    <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css"
+    />
+
 </head>
 
 <body class="bg-light">
@@ -65,6 +80,10 @@
                 ⚠ Risk Monitoring
             </a>
 
+            <a class="d-block mb-3 text-decoration-none" href="{{ route('map') }}">
+                🗺 Global Risk Map
+            </a>
+
             <a class="d-block mb-3 text-decoration-none" href="#">
                 📰 News
             </a>
@@ -100,6 +119,12 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+
+@stack('scripts')
 
 </body>
 

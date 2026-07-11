@@ -77,7 +77,9 @@
 
         </table>
 
-        {{ $countries->links() }}
+        <div class="d-flex justify-content-center mt-4">
+            {{ $countries->links() }}
+        </div>
 
     </div>
 
