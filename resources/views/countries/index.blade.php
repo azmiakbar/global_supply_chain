@@ -61,10 +61,8 @@
                     <td>
 
                         <a href="{{ route('countries.show',$country) }}"
-                           class="btn btn-primary btn-sm">
-
-                            Monitoring
-
+                            class="btn btn-primary btn-sm">
+                            Detail
                         </a>
 
                     </td>

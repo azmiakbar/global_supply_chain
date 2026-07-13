@@ -1,54 +1,182 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Data Shipment</title>
-</head>
-<body>
+@extends('layouts.app')
 
-<h1>Data Shipment</h1>
+@section('content')
 
-<a href="{{ route('shipments.create') }}">+ Tambah Shipment</a>
+<h2 class="mb-4">
+    🚢 Data Shipment
+</h2>
 
-<br><br>
+<div class="card shadow">
 
-<table border="1" cellpadding="10">
+    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
 
-    <tr>
-        <th>ID</th>
-        <th>Item</th>
-        <th>Origin Country</th>
-        <th>Destination Country</th>
-        <th>Status</th>
-        <th>Risk Level</th>
-    </tr>
+        <span>Daftar Shipment</span>
 
-    @forelse($shipments as $shipment)
+        <a href="{{ route('shipments.create') }}"
+           class="btn btn-light btn-sm">
 
-    <tr>
-        <td>{{ $shipment->id }}</td>
+            + Tambah Shipment
 
-        <td>{{ $shipment->item->name }}</td>
+        </a>
 
-        <td>{{ $shipment->originCountry->name }}</td>
+    </div>
 
-        <td>{{ $shipment->destinationCountry->name }}</td>
+    <div class="card-body">
 
-        <td>{{ $shipment->status }}</td>
+        <div class="table-responsive">
 
-        <td>{{ $shipment->risk_level }}</td>
-    </tr>
+            <table class="table table-bordered table-hover align-middle">
 
-    @empty
+                <thead class="table-dark">
 
-    <tr>
-        <td colspan="6">
-            Belum ada data shipment.
-        </td>
-    </tr>
+                <tr>
 
-    @endforelse
+                    <th>ID</th>
 
-</table>
+                    <th>Item</th>
 
-</body>
-</html>
+                    <th>Origin</th>
+
+                    <th>Destination</th>
+
+                    <th>Transport</th>
+
+                    <th>Qty</th>
+
+                    <th>Departure</th>
+
+                    <th>ETA</th>
+
+                    <th>Status</th>
+
+                    <th>Risk</th>
+
+                </tr>
+
+                </thead>
+
+                <tbody>
+
+                @forelse($shipments as $shipment)
+
+                <tr>
+
+                    <td>{{ $shipment->id }}</td>
+
+                    <td>{{ $shipment->item->name }}</td>
+
+                    <td>
+                        {{ $shipment->originCountry->name }}
+                        <br>
+                        <small class="text-muted">
+                            {{ $shipment->originPort->name }}
+                        </small>
+                    </td>
+
+                    <td>
+                        {{ $shipment->destinationCountry->name }}
+                        <br>
+                        <small class="text-muted">
+                            {{ $shipment->destinationPort->name }}
+                        </small>
+                    </td>
+
+                    <td>
+
+                        @if($shipment->transport_type=="Sea")
+
+                            🚢 Sea
+
+                        @elseif($shipment->transport_type=="Air")
+
+                            ✈ Air
+
+                        @else
+
+                            🚛 Land
+
+                        @endif
+
+                    </td>
+
+                    <td>{{ $shipment->quantity }}</td>
+
+                    <td>{{ $shipment->departure_date }}</td>
+
+                    <td>{{ $shipment->estimated_arrival }}</td>
+
+                    <td>
+
+                        @if($shipment->status=="Pending")
+
+                            <span class="badge bg-warning text-dark">
+                                Pending
+                            </span>
+
+                        @elseif($shipment->status=="In Transit")
+
+                            <span class="badge bg-info">
+                                In Transit
+                            </span>
+
+                        @else
+
+                            <span class="badge bg-success">
+                                Delivered
+                            </span>
+
+                        @endif
+
+                    </td>
+
+                    <td>
+
+                        @if($shipment->risk_level=="Low")
+
+                            <span class="badge bg-success">
+                                Low ({{ $shipment->risk_score }})
+                            </span>
+
+                        @elseif($shipment->risk_level=="Medium")
+
+                            <span class="badge bg-warning text-dark">
+                                Medium ({{ $shipment->risk_score }})
+                            </span>
+
+                        @else
+
+                            <span class="badge bg-danger">
+                                High ({{ $shipment->risk_score }})
+                            </span>
+
+                        @endif
+
+                    </td>
+
+                </tr>
+
+                @empty
+
+                <tr>
+
+                    <td colspan="10" class="text-center">
+
+                        Belum ada data shipment.
+
+                    </td>
+
+                </tr>
+
+                @endforelse
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+@endsection

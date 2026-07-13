@@ -95,36 +95,8 @@
 
 
     <p>
-        <label>Transport Type</label><br>
-
-        <select name="transport_type" required>
-            <option value="Sea">Sea</option>
-            <option value="Air">Air</option>
-            <option value="Land">Land</option>
-        </select>
-    </p>
-
-
-    <p>
         <label>Departure Date</label><br>
         <input type="date" name="departure_date" required>
-    </p>
-
-
-    <p>
-        <label>Estimated Arrival</label><br>
-        <input type="date" name="estimated_arrival" required>
-    </p>
-
-
-    <p>
-        <label>Status</label><br>
-
-        <select name="status" required>
-            <option value="Pending">Pending</option>
-            <option value="In Transit">In Transit</option>
-            <option value="Delivered">Delivered</option>
-        </select>
     </p>
 
 

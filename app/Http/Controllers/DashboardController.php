@@ -19,11 +19,25 @@ class DashboardController extends Controller
 
         $totalShipments = Shipment::count();
 
+        // Risk
         $lowRisk = Shipment::where('risk_level', 'Low')->count();
 
         $mediumRisk = Shipment::where('risk_level', 'Medium')->count();
 
         $highRisk = Shipment::where('risk_level', 'High')->count();
+
+        // Status Shipment
+        $pending = Shipment::where('status', 'Pending')->count();
+
+        $inTransit = Shipment::where('status', 'In Transit')->count();
+
+        $delivered = Shipment::where('status', 'Delivered')->count();
+
+        // Shipment per Negara Asal
+        $shipmentCountry = Shipment::selectRaw('origin_country_id, COUNT(*) as total')
+            ->groupBy('origin_country_id')
+            ->with('originCountry')
+            ->get();
 
         return view('dashboard', compact(
             'totalCountries',
@@ -32,7 +46,11 @@ class DashboardController extends Controller
             'totalShipments',
             'lowRisk',
             'mediumRisk',
-            'highRisk'
+            'highRisk',
+            'pending',
+            'inTransit',
+            'delivered',
+            'shipmentCountry'
         ));
     }
 

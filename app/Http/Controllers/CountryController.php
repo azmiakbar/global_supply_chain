@@ -40,58 +40,9 @@ class CountryController extends Controller
 
     public function show(Country $country)
     {
-        $weather = null;
-        $currency = null;
-        $economy = null;
-        $news = [];
-        $risk = null;
-
-        if ($country->latitude && $country->longitude) {
-
-            $weather = $this->weatherService->current(
-                (float) $country->latitude,
-                (float) $country->longitude
-            );
-
-        }
-
-        if ($country->currency) {
-
-            $currency = $this->currencyService->latest(
-                $country->currency
-            );
-
-        }
-
-        if ($country->code) {
-
-            $economy = $this->worldBankService->economy(
-                $country->code
-            );
-
-        }
-
-        $news = $this->newsService->latest(
-            $country->name
-        );
-
-        $risk = $this->riskService->calculate(
-            $weather,
-            $currency,
-            $economy,
-            $news
-        );
-
         return view(
             'countries.show',
-            compact(
-                'country',
-                'weather',
-                'currency',
-                'economy',
-                'news',
-                'risk'
-            )
+            compact('country')
         );
     }
 }

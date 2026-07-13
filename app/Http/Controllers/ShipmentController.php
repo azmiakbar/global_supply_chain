@@ -7,6 +7,7 @@ use App\Models\Item;
 use App\Models\Country;
 use App\Models\Port;
 use Illuminate\Http\Request;
+use App\Services\DistanceService;
 
 class ShipmentController extends Controller
 {
@@ -52,11 +53,20 @@ class ShipmentController extends Controller
             'origin_port_id' => 'required',
             'destination_port_id' => 'required',
             'quantity' => 'required|integer|min:1',
-            'transport_type' => 'required',
             'departure_date' => 'required|date',
-            'estimated_arrival' => 'required|date',
-            'status' => 'required',
         ]);
+
+        $origin = Country::find($request->origin_country_id);
+        $destination = Country::find($request->destination_country_id);
+        $distanceService = new DistanceService();
+        $distance = $distanceService->calculate(
+            (float) $origin->latitude,
+            (float) $origin->longitude,
+            (float) $destination->latitude,
+            (float) $destination->longitude
+        );
+        
+        $etaDays = max(1, ceil($distance / 700));
         
         Shipment::create([
             'item_id' => $request->item_id,
@@ -65,12 +75,15 @@ class ShipmentController extends Controller
             'origin_port_id' => $request->origin_port_id,
             'destination_port_id' => $request->destination_port_id,
             'quantity' => $request->quantity,
-            'transport_type' => $request->transport_type,
-            'departure_date' => $request->departure_date,
-            'estimated_arrival' => $request->estimated_arrival,
-            'status' => $request->status,
             
             // sementara otomatis
+            'transport_type' => 'Sea',
+            'departure_date' => $request->departure_date,
+            'estimated_arrival' => date(
+                'Y-m-d',
+                strtotime($request->departure_date . " +{$etaDays} days")
+            ),
+            'status' => 'Pending',
             'risk_level' => 'Low',
             'risk_score' => 10,
         ]);

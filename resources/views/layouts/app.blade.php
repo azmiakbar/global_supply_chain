@@ -75,8 +75,9 @@
             </a>
 
             <hr>
-
-            <a class="d-block mb-3 text-decoration-none" href="#">
+            <h6 class="text-muted">Monitoring</h6>
+            
+            <a class="d-block mb-3 text-decoration-none" href="{{ route('risk.index') }}">
                 ⚠ Risk Monitoring
             </a>
 
@@ -84,12 +85,29 @@
                 🗺 Global Risk Map
             </a>
 
+            <a class="d-block mb-3 text-decoration-none"
+                href="{{ route('comparison.index') }}">
+                📊 Country Comparison
+            </a>
+
             <a class="d-block mb-3 text-decoration-none" href="#">
-                📰 News
+                💱 Currency Dashboard
+                </a>
+
+            <a class="d-block mb-3 text-decoration-none" href="#">
+                📰 News Intelligence
             </a>
 
             <a class="d-block mb-3 text-decoration-none" href="#">
                 ⭐ Watchlist
+            </a>
+
+            <hr>
+
+            <h6 class="text-muted">Administration</h6>
+
+            <a class="d-block mb-3 text-decoration-none" href="#">
+                👤 Admin Dashboard
             </a>
 
             <hr>
@@ -123,6 +141,8 @@
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 @stack('scripts')
 
