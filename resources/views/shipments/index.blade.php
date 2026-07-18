@@ -25,9 +25,9 @@
 
         <div class="table-responsive">
 
-            <table class="table table-bordered table-hover align-middle">
+            <table class="table table-bordered table-hover align-middle text-center">
 
-                <thead class="table-dark">
+                <thead class="table-dark align-middle">
 
                 <tr>
 
@@ -45,11 +45,19 @@
 
                     <th>Departure</th>
 
-                    <th>ETA</th>
+                    <th>Base ETA</th>
+
+                    <th>Delay</th>
+
+                    <th>Final ETA</th>
 
                     <th>Status</th>
 
                     <th>Risk</th>
+
+                    <th style="min-width:260px;">
+                        Recommendation
+                    </th>
 
                 </tr>
 
@@ -61,95 +69,161 @@
 
                 <tr>
 
-                    <td>{{ $shipment->id }}</td>
+                    <td class="align-middle">
+                        {{ $shipment->id }}
+                    </td>
 
-                    <td>{{ $shipment->item->name }}</td>
+                    <td class="align-middle">
+                        {{ $shipment->item->name }}
+                    </td>
 
-                    <td>
-                        {{ $shipment->originCountry->name }}
+                    <td class="align-middle">
+
+                        <strong>
+                            {{ $shipment->originCountry->name }}
+                        </strong>
+
                         <br>
+
                         <small class="text-muted">
                             {{ $shipment->originPort->name }}
                         </small>
+
                     </td>
 
-                    <td>
-                        {{ $shipment->destinationCountry->name }}
+                    <td class="align-middle">
+
+                        <strong>
+                            {{ $shipment->destinationCountry->name }}
+                        </strong>
+
                         <br>
+
                         <small class="text-muted">
                             {{ $shipment->destinationPort->name }}
                         </small>
+
                     </td>
 
-                    <td>
+                    <td class="align-middle">
 
-                        @if($shipment->transport_type=="Sea")
+                        🚢 Sea
 
-                            🚢 Sea
+                    </td>
 
-                        @elseif($shipment->transport_type=="Air")
+                    <td class="align-middle">
 
-                            ✈ Air
+                        {{ $shipment->quantity }}
+
+                    </td>
+
+                    <td class="align-middle">
+
+                        {{ $shipment->departure_date }}
+
+                    </td>
+
+                    <td class="align-middle">
+
+                        {{ $shipment->estimated_days }} Days
+
+                    </td>
+
+                    <td class="align-middle">
+
+                        @if($shipment->delay_days > 0)
+
+                            <span class="badge bg-danger">
+
+                                +{{ $shipment->delay_days }} Days
+
+                            </span>
 
                         @else
 
-                            🚛 Land
+                            <span class="badge bg-success">
+
+                                No Delay
+
+                            </span>
 
                         @endif
 
                     </td>
 
-                    <td>{{ $shipment->quantity }}</td>
+                    <td class="align-middle">
 
-                    <td>{{ $shipment->departure_date }}</td>
+                        {{ $shipment->estimated_arrival }}
 
-                    <td>{{ $shipment->estimated_arrival }}</td>
+                    </td>
 
-                    <td>
+                    <td class="align-middle">
 
-                        @if($shipment->status=="Pending")
+                        @if($shipment->current_status == "Pending")
 
                             <span class="badge bg-warning text-dark">
+
                                 Pending
+
                             </span>
 
-                        @elseif($shipment->status=="In Transit")
+                        @elseif($shipment->current_status == "In Transit")
 
                             <span class="badge bg-info">
+
                                 In Transit
+
                             </span>
 
                         @else
 
                             <span class="badge bg-success">
+
                                 Delivered
+
                             </span>
 
                         @endif
 
                     </td>
 
-                    <td>
+                    <td class="align-middle">
 
-                        @if($shipment->risk_level=="Low")
+                        @if($shipment->risk_level=="LOW")
 
                             <span class="badge bg-success">
+
                                 Low ({{ $shipment->risk_score }})
+
                             </span>
 
-                        @elseif($shipment->risk_level=="Medium")
+                        @elseif($shipment->risk_level=="MEDIUM")
 
                             <span class="badge bg-warning text-dark">
+
                                 Medium ({{ $shipment->risk_score }})
+
                             </span>
 
                         @else
 
                             <span class="badge bg-danger">
+
                                 High ({{ $shipment->risk_score }})
+
                             </span>
 
                         @endif
+
+                    </td>
+
+                    <td class="align-middle">
+
+                        <small>
+
+                            {{ $shipment->latest_information }}
+
+                        </small>
 
                     </td>
 
@@ -159,7 +233,7 @@
 
                 <tr>
 
-                    <td colspan="10" class="text-center">
+                    <td colspan="13" class="text-center">
 
                         Belum ada data shipment.
 

@@ -1,212 +1,64 @@
 # 🌍 Global Supply Chain Risk Intelligence Platform
 
-## 📖 Deskripsi
+Global Supply Chain Risk Intelligence Platform merupakan aplikasi berbasis web (*Decision Support System*) yang dikembangkan menggunakan **Laravel 12**, **PHP 8.2**, **MySQL**, dan **Bootstrap 5**. Platform ini dirancang untuk memantau, menganalisis, dan memitigasi risiko operasional pengiriman barang internasional (*shipment*) secara real-time.
 
-Global Supply Chain Risk Intelligence Platform merupakan aplikasi berbasis web yang dikembangkan menggunakan Laravel untuk membantu memonitor kondisi dan risiko dalam proses pengiriman barang antar negara.
-
-Sistem ini memanfaatkan data cuaca, nilai tukar mata uang, kondisi ekonomi, serta berita internasional untuk memberikan informasi risiko pada suatu negara sebagai pendukung keputusan dalam aktivitas supply chain.
+Sistem mengintegrasikan data dari berbagai API global (cuaca, nilai tukar mata uang, indikator ekonomi makro, berita geopolitik) serta menyajikan visualisasi data geospasial dan analitik untuk mendukung pengambilan keputusan bisnis logistik.
 
 ---
 
-# 🎯 Tujuan
+## 🎯 Tujuan Proyek
 
-- Mempermudah monitoring kondisi negara tujuan pengiriman.
-- Menampilkan informasi risiko berdasarkan beberapa indikator.
-- Membantu pengelolaan data pengiriman internasional.
-- Menampilkan visualisasi data melalui dashboard.
-
----
-
-# 🛠️ Teknologi
-
-- Laravel 12
-- PHP 8.2
-- MySQL
-- Bootstrap 5
-- Chart.js
-- Leaflet.js
+- **Risk Mitigation**: Mengurangi risiko keterlambatan pengiriman dengan memantau indikator eksternal secara proaktif.
+- **Real-Time Monitoring**: Menyajikan kondisi cuaca ekstrem, fluktuasi kurs, inflasi negara tujuan, dan sentimen berita dunia.
+- **Decision Support**: Membantu logistik menentukan apakah pengiriman aman dilanjutkan, perlu diawasi ketat, atau harus ditunda.
+- **Data Engineering & Visualization**: Menyajikan visualisasi geospasial (peta rute & peta pelabuhan) dan grafik analitik tren.
 
 ---
 
-# 🌐 API yang Digunakan
+## 🌐 API Integrasi yang Digunakan
 
-### Open Meteo API
-
-Digunakan untuk memperoleh data:
-
-- Temperature
-- Humidity
-- Rain
-- Wind Speed
+1. **Open-Meteo API**: Mengambil data cuaca real-time (Suhu, Kelembaban, Curah Hujan, Kecepatan Angin) berdasarkan koordinat pelabuhan.
+2. **ExchangeRate API**: Mengambil kurs mata uang lokal terhadap USD secara real-time.
+3. **World Bank API**: Mengambil data indikator ekonomi makro (GDP, Inflasi, Populasi, Ekspor, Impor).
+4. **GNews API**: Mengambil berita internasional terbaru terkait supply chain, perdagangan, logistik, dan pelabuhan.
 
 ---
 
-### Exchange Rate API
+## ✨ Fitur Utama Sistem
 
-Digunakan untuk memperoleh nilai tukar mata uang terhadap USD.
+### 1. Global Country Dashboard & Watchlist
+- Memilih negara untuk melihat ringkasan profil negara (Ibu kota, Populasi, Bahasa, Mata uang, Wilayah).
+- Menyimpan negara pantauan ke dalam daftar **Watchlist** favorit bagi pengguna terdaftar.
 
----
+### 2. Risk Scoring & Prediction Engine
+Menghitung indeks risiko negara (skala 0 - 100) secara dinamis menggunakan rumus pembobotan:
+$$\text{Risk Score} = \text{Weather (25\%)} + \text{Currency (20\%)} + \text{Economy (25\%)} + \text{News Sentiment (30\%)}$$
+- 🟢 **LOW RISK** (Skor $\le$ 30): Pengiriman aman berjalan normal.
+- 🟡 **MEDIUM RISK** (Skor 31 - 70): Pengiriman diawasi ketat (Delay estimasi tiba +2 Hari).
+- 🔴 **HIGH RISK** (Skor $\ge$ 71): Disarankan menunda pengiriman (Delay estimasi tiba +5 Hari).
 
-### World Bank API
+### 3. Smart News Intelligence
+- Penarikan berita global dengan kueri tertarget supply chain & logistik.
+- **Weighted Classifier**: Klasifikasi kategori otomatis (*Shipping, Trade, Oil, Port, Logistics, Supply Chain*) berdasarkan bobot kata kunci pada judul (bobot 3) dan deskripsi (bobot 1).
+- **Deduplication Engine**: Membandingkan kemiripan judul berita (threshold 70%) untuk membuang berita duplikat (sindikasi media).
+- **False-Positive Filter**: Mengabaikan berita non-industri yang menyangkut nama kota pelabuhan (seperti *Port Dickson*, *Port Elizabeth*, dll).
+- **API Cache Protection**: Membungkus pemanggilan API dengan cache selama 15 menit untuk menghemat kuota harian GNews.
 
-Digunakan untuk memperoleh informasi ekonomi negara, seperti:
+### 4. Port Location Dashboard (Peta Pelabuhan)
+- Menyajikan sebaran pelabuhan laut dunia menggunakan **Leaflet.js Map**.
+- Dilengkapi form pencarian nama pelabuhan real-time dan filter dropdown negara.
+- Menggunakan **Leaflet MarkerCluster** untuk pengelompokan marker demi menjamin performa rendering halus di browser.
 
-- GDP
-- Inflation
-- Export
-- Import
+### 5. Shipment & Transit Monitoring
+- Pengelolaan rute pengiriman internasional (Port-to-Port).
+- Perhitungan jarak laut otomatis (*Great-Circle Distance*) untuk menentukan estimasi waktu tempuh dasar (*Base ETA*).
+- **Auto Status Transition**: Status pengiriman berubah otomatis (*Pending ➔ In Transit ➔ Delivered*) membandingkan tanggal hari ini dengan tanggal berangkat dan perkiraan kedatangan.
 
----
-
-### News API
-
-Digunakan untuk memperoleh berita berdasarkan nama negara.
-
----
-
-# ✨ Fitur yang Telah Dibuat
-
-## 📊 Dashboard
-
-Menampilkan ringkasan data sistem berupa:
-
-- Total Countries
-- Total Ports
-- Total Items
-- Total Shipments
-- Risk Summary
-- Grafik Risk Distribution
-- Grafik Shipment Status
+### 6. Data Visualization & Currency Dashboards
+- Grafik distribusi risiko (*Risk Distribution Pie Chart*) dan status pengiriman (*Shipment Status Pie Chart*).
+- **Currency Impact Chart**: Grafik garis (*Line Chart*) menggunakan Chart.js yang memantau tren fluktuasi nilai tukar mata uang utama dunia (EUR, GBP, JPY) terhadap USD selama 7 hari terakhir.
 
 ---
 
-## 🌍 Countries
-
-Master data negara yang berisi:
-
-- Nama Negara
-- Capital
-- Currency
-- Language
-- Region
-- Population
-- Latitude
-- Longitude
-
----
-
-## 📦 Items
-
-Pengelolaan data barang.
-
-Fitur:
-
-- Tambah Item
-- Edit Item
-- Hapus Item
-- Daftar Item
-
----
-
-## 🚢 Shipments
-
-Pengelolaan data pengiriman internasional.
-
-Fitur:
-
-- Tambah Shipment
-- Daftar Shipment
-- Origin Country
-- Destination Country
-- Origin Port
-- Destination Port
-- Quantity
-- Estimated Arrival (ETA) otomatis berdasarkan jarak
-- Status Shipment
-
----
-
-## ⚠ Risk Monitoring
-
-Monitoring kondisi suatu negara berdasarkan:
-
-- Live Weather
-- Currency
-- Economy
-- Latest News
-- Risk Score
-- Risk Level
-
----
-
-## 📊 Country Comparison
-
-Membandingkan dua negara berdasarkan:
-
-- Currency
-- Population
-- GDP
-- Inflation
-- Risk Score
-
----
-
-## 📰 News Intelligence
-
-Struktur awal halaman News Intelligence untuk menampilkan berita berdasarkan negara menggunakan News API.
-
----
-
-## 🗺️ Global Risk Map
-
-Visualisasi lokasi pengiriman menggunakan Leaflet Map.
-
----
-
-# 📈 Risk Scoring
-
-Risk dihitung berdasarkan beberapa indikator.
-
-| Faktor | Maksimum Skor |
-|---------|---------------|
-| Weather | 25 |
-| Currency | 20 |
-| Economy | 25 |
-| News | 30 |
-
-Total maksimum:
-
-100
-
-Kategori Risiko:
-
-- LOW
-- MEDIUM
-- HIGH
-
----
-
-
-# 🚀 Cara Menjalankan Project
-
-```bash
-git clone https://github.com/USERNAME/global_supply_chain.git
-
-cd global_supply_chain
-
-composer install
-
-cp .env.example .env
-
-php artisan key:generate
-
-php artisan migrate
-
-php artisan serve
-```
-
----
-
-# 👨‍💻 Developer
-
+## 👨‍💻 Developer
 **Azmi Akbar Nauli Dalimunthe**

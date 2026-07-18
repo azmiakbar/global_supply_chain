@@ -1,124 +1,219 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Tambah Shipment</title>
-</head>
-<body>
+@extends('layouts.app')
 
-<h1>Tambah Shipment</h1>
+@section('content')
 
-<form action="{{ route('shipments.store') }}" method="POST">
+<div class="container-fluid">
 
-    @csrf
+    <h2 class="mb-4">
+        🚢 Tambah Shipment
+    </h2>
 
-    <p>
-        <label>Item</label><br>
+    <div class="card shadow">
 
-        <select name="item_id" required>
+        <div class="card-header bg-primary text-white">
+            Informasi Shipment
+        </div>
 
-            <option value="">-- Pilih Item --</option>
+        <div class="card-body">
 
-            @foreach($items as $item)
-                <option value="{{ $item->id }}">
-                    {{ $item->name }}
-                </option>
-            @endforeach
+            <form action="{{ route('shipments.store') }}" method="POST">
 
-        </select>
-    </p>
+                @csrf
 
+                <div class="row">
 
-    <p>
-        <label>Origin Country</label><br>
+                    <div class="col-md-6 mb-3">
 
-        <select id="origin_country" name="origin_country_id" required>
+                        <label class="form-label">
+                            Item
+                        </label>
 
-            <option value="">-- Pilih Negara Asal --</option>
+                        <select
+                            name="item_id"
+                            class="form-select"
+                            required>
 
-            @foreach($countries as $country)
-                <option value="{{ $country->id }}">
-                    {{ $country->name }}
-                </option>
-            @endforeach
+                            <option value="">
+                                -- Pilih Item --
+                            </option>
 
-        </select>
-    </p>
+                            @foreach($items as $item)
 
+                                <option value="{{ $item->id }}">
+                                    {{ $item->name }}
+                                </option>
 
-    <p>
-        <label>Origin Port</label><br>
+                            @endforeach
 
-        <select id="origin_port" name="origin_port_id" required>
+                        </select>
 
-            <option value="">
-                -- Pilih Negara Asal Terlebih Dahulu --
-            </option>
-
-        </select>
-    </p>
+                    </div>
 
 
-    <p>
-        <label>Destination Country</label><br>
+                    <div class="col-md-6 mb-3">
 
-        <select id="destination_country" name="destination_country_id" required>
+                        <label class="form-label">
+                            Quantity
+                        </label>
 
-            <option value="">-- Pilih Negara Tujuan --</option>
+                        <input
+                            type="number"
+                            class="form-control"
+                            name="quantity"
+                            min="1"
+                            required>
 
-            @foreach($countries as $country)
-                <option value="{{ $country->id }}">
-                    {{ $country->name }}
-                </option>
-            @endforeach
-
-        </select>
-    </p>
-
-
-    <p>
-        <label>Destination Port</label><br>
-
-        <select id="destination_port" name="destination_port_id" required>
-
-            <option value="">
-                -- Pilih Negara Tujuan Terlebih Dahulu --
-            </option>
-
-        </select>
-    </p>
+                    </div>
 
 
-    <p>
-        <label>Quantity</label><br>
-        <input type="number" name="quantity" min="1" required>
-    </p>
+                    <div class="col-md-6 mb-3">
+
+                        <label class="form-label">
+                            Origin Country
+                        </label>
+
+                        <select
+                            id="origin_country"
+                            name="origin_country_id"
+                            class="form-select"
+                            required>
+
+                            <option value="">
+                                -- Pilih Negara Asal --
+                            </option>
+
+                            @foreach($countries as $country)
+
+                                <option value="{{ $country->id }}">
+                                    {{ $country->name }}
+                                </option>
+
+                            @endforeach
+
+                        </select>
+
+                    </div>
 
 
-    <p>
-        <label>Departure Date</label><br>
-        <input type="date" name="departure_date" required>
-    </p>
+                    <div class="col-md-6 mb-3">
+
+                        <label class="form-label">
+                            Origin Port
+                        </label>
+
+                        <select
+                            id="origin_port"
+                            name="origin_port_id"
+                            class="form-select"
+                            required>
+
+                            <option value="">
+                                -- Pilih Negara Asal --
+                            </option>
+
+                        </select>
+
+                    </div>
 
 
-    <button type="submit">
-        Simpan Shipment
-    </button>
+                    <div class="col-md-6 mb-3">
 
-</form>
+                        <label class="form-label">
+                            Destination Country
+                        </label>
+
+                        <select
+                            id="destination_country"
+                            name="destination_country_id"
+                            class="form-select"
+                            required>
+
+                            <option value="">
+                                -- Pilih Negara Tujuan --
+                            </option>
+
+                            @foreach($countries as $country)
+
+                                <option value="{{ $country->id }}">
+                                    {{ $country->name }}
+                                </option>
+
+                            @endforeach
+
+                        </select>
+
+                    </div>
 
 
-<br>
+                    <div class="col-md-6 mb-3">
 
-<a href="{{ route('shipments.index') }}">
-    ← Kembali
-</a>
+                        <label class="form-label">
+                            Destination Port
+                        </label>
+
+                        <select
+                            id="destination_port"
+                            name="destination_port_id"
+                            class="form-select"
+                            required>
+
+                            <option value="">
+                                -- Pilih Negara Tujuan --
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="col-md-6 mb-3">
+
+                        <label class="form-label">
+                            Departure Date
+                        </label>
+
+                        <input
+                            type="date"
+                            class="form-control"
+                            name="departure_date"
+                            required>
+
+                    </div>
+
+                </div>
+
+                <hr>
+
+                <button
+                    type="submit"
+                    class="btn btn-success">
+
+                    💾 Simpan Shipment
+
+                </button>
+
+                <a
+                    href="{{ route('shipments.index') }}"
+                    class="btn btn-secondary">
+
+                    ← Kembali
+
+                </a>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
 
 
 <script>
 
 async function loadPorts(countryId, targetId)
 {
-    if(countryId == "")
+    if(countryId=="")
     {
         document.getElementById(targetId).innerHTML =
         '<option value="">-- Pilih Negara Terlebih Dahulu --</option>';
@@ -126,34 +221,34 @@ async function loadPorts(countryId, targetId)
         return;
     }
 
-    const response = await fetch('/ports/' + countryId);
+    const response = await fetch('/ports/'+countryId);
 
     const ports = await response.json();
 
-    let html = '<option value="">-- Pilih Port --</option>';
+    let html='<option value="">-- Pilih Pelabuhan --</option>';
 
     ports.forEach(function(port){
 
-        html += `<option value="${port.id}">
-                    ${port.name}
-                 </option>`;
+        html += `
+            <option value="${port.id}">
+                ${port.name}
+            </option>
+        `;
 
     });
 
-    document.getElementById(targetId).innerHTML = html;
+    document.getElementById(targetId).innerHTML=html;
 }
 
-
 document.getElementById('origin_country')
-.addEventListener('change', function(){
+.addEventListener('change',function(){
 
     loadPorts(this.value,'origin_port');
 
 });
 
-
 document.getElementById('destination_country')
-.addEventListener('change', function(){
+.addEventListener('change',function(){
 
     loadPorts(this.value,'destination_port');
 
@@ -161,5 +256,4 @@ document.getElementById('destination_country')
 
 </script>
 
-</body>
-</html>
+@endsection

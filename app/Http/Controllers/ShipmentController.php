@@ -8,12 +8,20 @@ use App\Models\Country;
 use App\Models\Port;
 use Illuminate\Http\Request;
 use App\Services\DistanceService;
+use App\Services\RiskService;
+use App\Services\ShipmentMonitoringService;
+use App\Services\WeatherService;
+use App\Services\CurrencyService;
+use App\Services\WorldBankService;
+use App\Services\NewsService;
 
 class ShipmentController extends Controller
+
 {
     /**
      * Display a listing of the resource.
      */
+    
     public function index()
     {
         $shipments = Shipment::with([
@@ -23,7 +31,7 @@ class ShipmentController extends Controller
             'originPort',
             'destinationPort',
         ])->latest()->get();
-            
+
         return view('shipments.index', compact('shipments'));
     }
 
@@ -55,40 +63,140 @@ class ShipmentController extends Controller
             'quantity' => 'required|integer|min:1',
             'departure_date' => 'required|date',
         ]);
+        
+        $originCountry = Country::findOrFail($request->origin_country_id);
 
-        $origin = Country::find($request->origin_country_id);
-        $destination = Country::find($request->destination_country_id);
+        $destinationCountry = Country::findOrFail($request->destination_country_id);
+
+        $originPort = Port::findOrFail($request->origin_port_id);
+
+        $destinationPort = Port::findOrFail($request->destination_port_id);
+
+        /*
+        |--------------------------------------------------------------------------
+        | Calculate Distance
+        |--------------------------------------------------------------------------
+        */
+
         $distanceService = new DistanceService();
+
         $distance = $distanceService->calculate(
-            (float) $origin->latitude,
-            (float) $origin->longitude,
-            (float) $destination->latitude,
-            (float) $destination->longitude
+            (float) $originPort->latitude,
+            (float) $originPort->longitude,
+            (float) $destinationPort->latitude,
+            (float) $destinationPort->longitude
         );
-        
+
         $etaDays = max(1, ceil($distance / 700));
-        
+
+        /*
+        |--------------------------------------------------------------------------
+        | External Monitoring
+        |--------------------------------------------------------------------------
+        */
+
+        $weatherService = new WeatherService();
+        $currencyService = new CurrencyService();
+        $worldBankService = new WorldBankService();
+        $newsService = new NewsService();
+
+        $weather = $weatherService->current(
+            (float) $originPort->latitude,
+            (float) $originPort->longitude
+        );
+
+        $currency = $currencyService->latest(
+            $destinationCountry->currency
+        );
+
+        $economy = $worldBankService->economy(
+            $destinationCountry->code
+        );
+
+        $news = $newsService->latest(
+            $destinationCountry->name
+        );
+
+        /*
+        |--------------------------------------------------------------------------
+        | Calculate Risk
+        |--------------------------------------------------------------------------
+        */
+
+        $riskService = new RiskService();
+
+        $risk = $riskService->calculate(
+            $weather,
+            $currency,
+            $economy,
+            $news
+        );
+
+        /*
+        |--------------------------------------------------------------------------
+        | Shipment Monitoring
+        |--------------------------------------------------------------------------
+        */
+
+        $monitor = new ShipmentMonitoringService();
+
+        $monitoring = $monitor->generate(
+            $risk,
+            $etaDays
+        );
+
         Shipment::create([
+
             'item_id' => $request->item_id,
+
             'origin_country_id' => $request->origin_country_id,
+
             'destination_country_id' => $request->destination_country_id,
+
             'origin_port_id' => $request->origin_port_id,
+
             'destination_port_id' => $request->destination_port_id,
+
             'quantity' => $request->quantity,
-            
-            // sementara otomatis
+
             'transport_type' => 'Sea',
+
             'departure_date' => $request->departure_date,
+
             'estimated_arrival' => date(
                 'Y-m-d',
-                strtotime($request->departure_date . " +{$etaDays} days")
+                strtotime(
+                    $request->departure_date .
+                    " +{$monitoring['final_eta']} days"
+                )
             ),
+
+            'estimated_days' => $monitoring['base_eta'],
+
+            'delay_days' => $monitoring['delay_days'],
+
+            'actual_estimated_arrival' => date(
+                'Y-m-d',
+                strtotime(
+                    $request->departure_date .
+                    " +{$monitoring['final_eta']} days"
+                )
+            ),
+
+            'last_monitoring' => now(),
+
+            'latest_information' => $monitoring['recommendation'],
+
             'status' => 'Pending',
-            'risk_level' => 'Low',
-            'risk_score' => 10,
+
+            'risk_level' => $risk['level'],
+
+            'risk_score' => $risk['total'],
+
         ]);
-        
-        return redirect()->route('shipments.index')
+
+        return redirect()
+            ->route('shipments.index')
             ->with('success', 'Shipment berhasil ditambahkan.');
     }
 

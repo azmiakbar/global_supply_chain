@@ -9,51 +9,116 @@ class CountrySeeder extends Seeder
 {
     public function run(): void
     {
-        $path = database_path('data/countries_raw.json');
+        $population = collect(json_decode(file_get_contents(database_path('data/country-by-population.json')), true))
+            ->keyBy('country');
 
-        $countries = json_decode(
-            file_get_contents($path),
-            true
-        );
+        $capital = collect(json_decode(file_get_contents(database_path('data/country-by-capital-city.json')), true))
+            ->keyBy('country');
+
+        $currency = collect(json_decode(file_get_contents(database_path('data/country-by-currency-code.json')), true))
+            ->keyBy('country');
+
+        $language = collect(json_decode(file_get_contents(database_path('data/country-by-languages.json')), true))
+            ->keyBy('country');
+
+        $geo = collect(json_decode(file_get_contents(database_path('data/country-by-geo-coordinates.json')), true))
+            ->keyBy('country');
+
+        $countries = Country::all();
 
         foreach ($countries as $country) {
 
-            Country::updateOrCreate(
+            $name = $this->normalizeCountryName($country->name);
 
-                ['code' => $country['cca2']],
+            $pop = $population->get($name);
 
-                [
+            $cap = $capital->get($name);
 
-                    'name' => $country['name']['common'],
+            $cur = $currency->get($name);
 
-                    'code' => $country['cca2'],
+            $lang = $language->get($name);
 
-                    'capital' => !empty($country['capital'])
-                        ? $country['capital'][0]
-                        : 'Unknown',
+            $loc = $geo->get($name);
 
-                    'latitude' => $country['latlng'][0] ?? null,
+            $country->population = $pop['population'] ?? 0;
 
-                    'longitude' => $country['latlng'][1] ?? null,
+            $country->capital = $cap['city'] ?? $country->capital;
 
-                    'currency' => !empty($country['currencies'])
-                        ? array_key_first($country['currencies'])
-                        : 'N/A',
+            $country->currency = $cur['currency_code'] ?? $country->currency;
 
-                    'language' => !empty($country['languages'])
-                        ? array_values($country['languages'])[0]
-                        : 'Unknown',
+            $country->language = isset($lang['languages'])
+                ? implode(', ', array_slice($lang['languages'], 0, 5))
+                : $country->language;
 
-                    'region' => $country['region'],
+            $country->latitude = isset($loc['north']) && isset($loc['south'])
+                ? (($loc['north'] + $loc['south']) / 2)
+                : $country->latitude;
 
-                    'population' => $country['population'] ?? 0,
+            $country->longitude = isset($loc['east']) && isset($loc['west'])
+                ? (($loc['east'] + $loc['west']) / 2)
+                : $country->longitude;
 
-                    'flag' => $country['flag'] ?? '🏳️',
-
-                ]
-
-            );
+            $country->save();
 
         }
+    }
+
+    private function normalizeCountryName(string $name): string
+    {
+        $map = [
+            'Cabo Verde' => 'Cape Verde',
+
+            "Côte d'Ivoire" => 'Ivory Coast',
+
+            'Timor-Leste' => 'East Timor',
+
+            'United States' => 'United States of America',
+
+            'Russia' => 'Russian Federation',
+
+            'South Korea' => 'Korea',
+
+            'North Korea' => "Korea (Democratic People's Republic of)",
+
+            'Czechia' => 'Czech Republic',
+
+            'Eswatini' => 'Swaziland',
+
+            'Myanmar' => 'Burma',
+
+            'Palestine' => 'Palestine',
+
+            'Vatican City' => 'Holy See (Vatican City State)',
+
+            'Brunei Darussalam' => 'Brunei',
+
+            'Republic of the Congo' => 'Congo',
+
+            'Democratic Republic of the Congo'
+                => 'Congo, The Democratic Republic of the',
+
+            'Moldova' => 'Moldova, Republic of',
+
+            'Iran' => 'Iran, Islamic Republic of',
+
+            'Syria' => 'Syrian Arab Republic',
+
+            'Laos' => "Lao People's Democratic Republic",
+
+            'Bolivia' => 'Bolivia',
+
+            'Tanzania' => 'Tanzania, United Republic of',
+
+            'Venezuela' => 'Venezuela, Bolivarian Republic of',
+
+            'Micronesia' => 'Micronesia, Federated States of',
+
+            'Vietnam' => 'Viet Nam',
+
+            'Macau' => 'Macao',
+            
+        ];
+        
+        return $map[$name] ?? $name;
     }
 }

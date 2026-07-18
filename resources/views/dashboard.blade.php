@@ -6,17 +6,35 @@
     🌍 Global Supply Chain Risk Intelligence Platform
 </h2>
 
-<div class="row">
+<div class="row g-4">
 
-    <div class="col-md-3 mb-3">
+    <div class="col-md-3">
 
-        <div class="card shadow">
+        <div class="card border-0 shadow-lg bg-primary text-white">
 
             <div class="card-body">
 
-                <h5>Total Countries</h5>
+                <div class="d-flex justify-content-between align-items-center">
 
-                <h2>{{ $totalCountries }}</h2>
+                    <div>
+
+                        <small>Total Countries</small>
+
+                        <h2 class="fw-bold">
+
+                            {{ $totalCountries }}
+
+                        </h2>
+
+                    </div>
+
+                    <div style="font-size:55px">
+
+                        🌍
+
+                    </div>
+
+                </div>
 
             </div>
 
@@ -24,15 +42,33 @@
 
     </div>
 
-    <div class="col-md-3 mb-3">
+    <div class="col-md-3">
 
-        <div class="card shadow">
+        <div class="card border-0 shadow-lg bg-success text-white">
 
             <div class="card-body">
 
-                <h5>Total Ports</h5>
+                <div class="d-flex justify-content-between align-items-center">
 
-                <h2>{{ number_format($totalPorts) }}</h2>
+                    <div>
+
+                        <small>Total Sea Ports</small>
+
+                        <h2 class="fw-bold">
+
+                            {{ number_format($totalPorts) }}
+
+                        </h2>
+
+                    </div>
+
+                    <div style="font-size:55px">
+
+                        🚢
+
+                    </div>
+
+                </div>
 
             </div>
 
@@ -40,15 +76,33 @@
 
     </div>
 
-    <div class="col-md-3 mb-3">
+    <div class="col-md-3">
 
-        <div class="card shadow">
+        <div class="card border-0 shadow-lg bg-warning text-dark">
 
             <div class="card-body">
 
-                <h5>Total Items</h5>
+                <div class="d-flex justify-content-between align-items-center">
 
-                <h2>{{ $totalItems }}</h2>
+                    <div>
+
+                        <small>Total Shipments</small>
+
+                        <h2 class="fw-bold">
+
+                            {{ $totalShipments }}
+
+                        </h2>
+
+                    </div>
+
+                    <div style="font-size:55px">
+
+                        📦
+
+                    </div>
+
+                </div>
 
             </div>
 
@@ -56,15 +110,33 @@
 
     </div>
 
-    <div class="col-md-3 mb-3">
+    <div class="col-md-3">
 
-        <div class="card shadow">
+        <div class="card border-0 shadow-lg bg-danger text-white">
 
             <div class="card-body">
 
-                <h5>Total Shipments</h5>
+                <div class="d-flex justify-content-between align-items-center">
 
-                <h2>{{ $totalShipments }}</h2>
+                    <div>
+
+                        <small>High Risk</small>
+
+                        <h2 class="fw-bold">
+
+                            {{ $highRisk }}
+
+                        </h2>
+
+                    </div>
+
+                    <div style="font-size:55px">
+
+                        ⚠️
+
+                    </div>
+
+                </div>
 
             </div>
 
@@ -76,41 +148,41 @@
 
 <hr>
 
-<h4>Risk Summary</h4>
+    <h4>Risk Summary</h4>
 
-<div class="row">
+    <div class="row">
 
-    <div class="col-md-4">
+        <div class="col-md-4">
 
-        <div class="alert alert-success">
+            <div class="alert alert-success">
 
-            Low Risk : <strong>{{ $lowRisk }}</strong>
+                Low Risk : <strong>{{ $lowRisk }}</strong>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-4">
+
+            <div class="alert alert-warning">
+
+                Medium Risk : <strong>{{ $mediumRisk }}</strong>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-4">
+
+            <div class="alert alert-danger">
+
+                High Risk : <strong>{{ $highRisk }}</strong>
+
+            </div>
 
         </div>
 
     </div>
-
-    <div class="col-md-4">
-
-        <div class="alert alert-warning">
-
-            Medium Risk : <strong>{{ $mediumRisk }}</strong>
-
-        </div>
-
-    </div>
-
-    <div class="col-md-4">
-
-        <div class="alert alert-danger">
-
-            High Risk : <strong>{{ $highRisk }}</strong>
-
-        </div>
-
-    </div>
-
-</div>
 
 <hr>
 

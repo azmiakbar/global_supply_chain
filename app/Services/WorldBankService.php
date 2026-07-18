@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use Illuminate\Support\Facades\Http;
+use Exception;
 
 class WorldBankService
 {
@@ -21,37 +22,49 @@ class WorldBankService
 
         foreach ($indicators as $key => $indicator) {
 
-            $response = Http::get(
-                "https://api.worldbank.org/v2/country/{$countryCode}/indicator/{$indicator}",
-                [
-                    'format' => 'json',
-                    'per_page' => 5,
-                ]
-            );
+            try {
 
-            if (!$response->successful()) {
-                $result[$key] = null;
-                continue;
-            }
+                $response = Http::timeout(8)
+                    ->connectTimeout(5)
+                    ->get(
+                        "https://api.worldbank.org/v2/country/{$countryCode}/indicator/{$indicator}",
+                        [
+                            'format' => 'json',
+                            'per_page' => 50,
+                        ]
+                    );
 
-            $json = $response->json();
+                if (!$response->successful()) {
+                    $result[$key] = null;
+                    continue;
+                }
 
-            $value = null;
+                $json = $response->json();
 
-            if (isset($json[1])) {
+                $value = null;
 
-                foreach ($json[1] as $row) {
+                if (isset($json[1])) {
 
-                    if (!is_null($row['value'])) {
-                        $value = $row['value'];
-                        break;
+                    foreach ($json[1] as $row) {
+                        if (
+                            isset($row['value']) &&
+                            $row['value'] !== null &&
+                            $row['value'] > 0
+                        ) {
+                            $value = $row['value'];
+                            break;
+                        }
                     }
 
                 }
 
-            }
+                $result[$key] = $value;
 
-            $result[$key] = $value;
+            } catch (Exception $e) {
+
+                $result[$key] = null;
+
+            }
 
         }
 

@@ -85,20 +85,27 @@
                 🗺 Global Risk Map
             </a>
 
+            <a class="d-block mb-3 text-decoration-none" href="{{ route('ports.dashboard') }}">
+                ⚓ Port Dashboard
+            </a>
+
             <a class="d-block mb-3 text-decoration-none"
                 href="{{ route('comparison.index') }}">
                 📊 Country Comparison
             </a>
 
-            <a class="d-block mb-3 text-decoration-none" href="#">
+            <a class="d-block mb-3 text-decoration-none"
+                href="{{ route('currency.dashboard') }}">
                 💱 Currency Dashboard
-                </a>
+            </a>
 
-            <a class="d-block mb-3 text-decoration-none" href="#">
+            <a class="d-block mb-3 text-decoration-none"
+                href="{{ route('news.index') }}">
                 📰 News Intelligence
             </a>
 
-            <a class="d-block mb-3 text-decoration-none" href="#">
+            <a class="d-block mb-3 text-decoration-none"
+                href="{{ route('watchlist.index') }}">
                 ⭐ Watchlist
             </a>
 
@@ -106,11 +113,10 @@
 
             <h6 class="text-muted">Administration</h6>
 
-            <a class="d-block mb-3 text-decoration-none" href="#">
-                👤 Admin Dashboard
+            <a class="d-block mb-3 text-decoration-none"
+                href="{{ route('admin.index') }}">
+                👨‍💼 Admin Dashboard
             </a>
-
-            <hr>
 
             <form action="{{ route('logout') }}" method="POST">
 

@@ -6,11 +6,10 @@ use Illuminate\Support\Facades\Http;
 
 class CurrencyService
 {
-    public function latest(string $currency): ?array
+    public function latest(?string $currencyCode = null): ?array
     {
-        $response = Http::get(
-            "https://open.er-api.com/v6/latest/USD"
-        );
+        $response = Http::timeout(10)
+            ->get('https://open.er-api.com/v6/latest/USD');
 
         if (!$response->successful()) {
             return null;
@@ -18,15 +17,16 @@ class CurrencyService
 
         $data = $response->json();
 
-        if (!isset($data['rates'][$currency])) {
-            return null;
+        if ($currencyCode === null) {
+            return $data;
         }
 
         return [
-            'base' => 'USD',
-            'currency' => $currency,
-            'rate' => $data['rates'][$currency],
-            'updated' => $data['time_last_update_utc'] ?? null,
+
+            'code' => $currencyCode,
+
+            'rate' => $data['rates'][$currencyCode] ?? null,
+
         ];
     }
 }

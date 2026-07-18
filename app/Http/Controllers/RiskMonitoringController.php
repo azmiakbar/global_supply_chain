@@ -3,11 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Country;
+use App\Models\Watchlist;
 use App\Services\WeatherService;
 use App\Services\CurrencyService;
 use App\Services\WorldBankService;
 use App\Services\NewsService;
 use App\Services\RiskService;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 
 class RiskMonitoringController extends Controller
 {
@@ -46,35 +49,51 @@ class RiskMonitoringController extends Controller
         $news = [];
         $risk = null;
 
+        // ==========================
+        // WEATHER
+        // ==========================
         if ($country->latitude && $country->longitude) {
-
             $weather = $this->weatherService->current(
-                (float)$country->latitude,
-                (float)$country->longitude
+                (float) $country->latitude,
+                (float) $country->longitude
             );
-
         }
 
-        if ($country->currency) {
+        // ==========================
+        // CURRENCY
+        // ==========================
+        if (!empty($country->currency)) {
 
-            $currency = $this->currencyService->latest(
-                $country->currency
-            );
+            $data = $this->currencyService->latest($country->currency);
 
+            if ($data) {
+                $currency = [
+                    'base' => 'USD',
+                    'currency' => $data['code'],
+                    'rate' => $data['rate'],
+                    'updated' => now()->format('d M Y H:i'),
+                ];
+            }
         }
 
-        if ($country->code) {
-
-            $economy = $this->worldBankService->economy(
-                $country->code
-            );
-
+        // ==========================
+        // WORLD BANK
+        // ==========================
+        if (!empty($country->code)) {
+            $economy = $this->worldBankService->economy($country->code);
         }
 
-        $news = $this->newsService->latest(
-            $country->name
-        );
+        // ==========================
+        // NEWS
+        // ==========================
+        $news = Cache::remember("country_news_{$country->id}", 15 * 60, function () use ($country) {
+            $query = '"' . $country->name . '" AND ("supply chain" OR logistics OR shipping OR port OR trade OR oil OR economy OR industry)';
+            return $this->newsService->latest($query);
+        });
 
+        // ==========================
+        // RISK SCORE
+        // ==========================
         $risk = $this->riskService->calculate(
             $weather,
             $currency,
@@ -82,16 +101,25 @@ class RiskMonitoringController extends Controller
             $news
         );
 
-        return view(
-            'risk.show',
-            compact(
-                'country',
-                'weather',
-                'currency',
-                'economy',
-                'news',
-                'risk'
-            )
-        );
+        // ==========================
+        // WATCHLIST
+        // ==========================
+        $isWatchlist = false;
+
+        if (Auth::check()) {
+            $isWatchlist = Watchlist::where('user_id', Auth::id())
+                ->where('country_id', $country->id)
+                ->exists();
+        }
+
+        return view('risk.show', compact(
+            'country',
+            'weather',
+            'currency',
+            'economy',
+            'news',
+            'risk',
+            'isWatchlist'
+        ));
     }
 }

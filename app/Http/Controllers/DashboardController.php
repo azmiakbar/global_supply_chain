@@ -6,34 +6,45 @@ use App\Models\Country;
 use App\Models\Port;
 use App\Models\Shipment;
 use App\Models\Item;
+use App\Models\Watchlist;
+use App\Models\User;
+use App\Models\NewsAnalysis;
 
 class DashboardController extends Controller
 {
     public function index()
     {
-        $totalCountries = Country::count();
-
+        $totalCountries = Country::where('name', '!=', 'Unknown')->count();
         $totalPorts = Port::count();
-
         $totalItems = Item::count();
-
         $totalShipments = Shipment::count();
 
-        // Risk
-        $lowRisk = Shipment::where('risk_level', 'Low')->count();
+        $lowRisk = Shipment::where('risk_level', 'LOW')->count();
+        $mediumRisk = Shipment::where('risk_level', 'MEDIUM')->count();
+        $highRisk = Shipment::where('risk_level', 'HIGH')->count();
 
-        $mediumRisk = Shipment::where('risk_level', 'Medium')->count();
+        $pending = 0;
+        $inTransit = 0;
+        $delivered = 0;
 
-        $highRisk = Shipment::where('risk_level', 'High')->count();
+        foreach (Shipment::all() as $shipment) {
 
-        // Status Shipment
-        $pending = Shipment::where('status', 'Pending')->count();
+            if ($shipment->current_status == 'Pending') {
 
-        $inTransit = Shipment::where('status', 'In Transit')->count();
+                $pending++;
 
-        $delivered = Shipment::where('status', 'Delivered')->count();
+            } elseif ($shipment->current_status == 'In Transit') {
 
-        // Shipment per Negara Asal
+                $inTransit++;
+
+            } else {
+
+                $delivered++;
+
+            }
+
+        }
+
         $shipmentCountry = Shipment::selectRaw('origin_country_id, COUNT(*) as total')
             ->groupBy('origin_country_id')
             ->with('originCountry')
@@ -60,7 +71,24 @@ class DashboardController extends Controller
             'originCountry',
             'destinationCountry'
         ])->get();
-            
+
         return view('map', compact('shipments'));
+    }
+
+    public function admin()
+    {
+        return view('admin.index', [
+
+            'users' => User::count(),
+
+            'ports' => Port::count(),
+
+            'news' => NewsAnalysis::count(),
+
+            'countries' => Country::count(),
+
+            'shipments' => Shipment::count(),
+
+        ]);
     }
 }

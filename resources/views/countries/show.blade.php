@@ -50,7 +50,9 @@
 
                     <tr>
                         <th>Language</th>
-                        <td>{{ $country->language }}</td>
+                        <td style="max-width:250px">
+                            {{ \Illuminate\Support\Str::limit($country->language, 60) }}
+                        </td>
                     </tr>
 
                     <tr>
@@ -65,12 +67,12 @@
 
                     <tr>
                         <th>Latitude</th>
-                        <td>{{ $country->latitude }}</td>
+                        <td>{{ number_format($country->latitude,2) }}</td>
                     </tr>
 
                     <tr>
                         <th>Longitude</th>
-                        <td>{{ $country->longitude }}</td>
+                        <td>{{ number_format($country->longitude,2) }}</td>
                     </tr>
 
                 </table>
@@ -102,15 +104,6 @@
                     ibu kota, mata uang, bahasa, wilayah, populasi,
                     serta koordinat geografis.
                 </p>
-
-                <hr>
-
-                <a href="{{ route('risk.show',$country) }}"
-                   class="btn btn-danger">
-
-                    ⚠ Monitor Risk Negara
-
-                </a>
 
             </div>
 
