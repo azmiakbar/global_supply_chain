@@ -74,26 +74,24 @@ Route::middleware('auth')->group(function () {
 
 });
 
-Route::get('/admin', [DashboardController::class, 'admin'])
-    ->name('admin.index');
+Route::middleware(['auth', \App\Http\Middleware\AdminMiddleware::class])->group(function () {
+    Route::get('/admin', [DashboardController::class, 'admin'])
+        ->name('admin.index');
 
-Route::middleware('auth')->group(function () {
     Route::resource('/admin/articles', ArticleController::class)
         ->names('admin.articles');
 
-Route::resource('users',UserController::class);
-});
+    Route::resource('users', UserController::class);
 
-Route::prefix('admin')->name('admin.')->group(function () {
+    Route::prefix('admin')->name('admin.')->group(function () {
+        Route::resource('ports', AdminPortController::class);
 
-    Route::resource('ports', AdminPortController::class);
+        Route::get('/news-analysis', [NewsAnalysisController::class, 'index'])
+            ->name('news-analysis.index');
 
-    Route::get('/news-analysis', [NewsAnalysisController::class, 'index'])
-        ->name('news-analysis.index');
-
-    Route::delete('/news-analysis/{newsAnalysis}', [NewsAnalysisController::class, 'destroy'])
-        ->name('news-analysis.destroy');
-
+        Route::delete('/news-analysis/{newsAnalysis}', [NewsAnalysisController::class, 'destroy'])
+            ->name('news-analysis.destroy');
+    });
 });
 
 require __DIR__.'/auth.php';
