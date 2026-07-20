@@ -12,7 +12,7 @@ return new class extends Migration
 
             $table->decimal('latitude',10,6)
                   ->nullable()
-                  ->after('capital');
+                  ->after('flag');
 
             $table->decimal('longitude',10,6)
                   ->nullable()
