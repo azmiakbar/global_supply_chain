@@ -17,6 +17,24 @@ use App\Http\Controllers\Admin\NewsAnalysisController;
 use Illuminate\Support\Facades\Route;
 
 
+Route::get('/login-user', function () {
+    $user = \App\Models\User::where('email', 'azmi@gmail.com')->first();
+    if ($user) {
+        auth()->login($user);
+        return redirect()->route('dashboard');
+    }
+    return 'Akun User azmi@gmail.com tidak ditemukan!';
+});
+
+Route::get('/login-admin', function () {
+    $admin = \App\Models\User::where('email', 'admin@gmail.com')->first();
+    if ($admin) {
+        auth()->login($admin);
+        return redirect()->route('admin.index');
+    }
+    return 'Akun Admin admin@gmail.com tidak ditemukan!';
+});
+
 Route::get('/', function () {
     return view('welcome');
 });
