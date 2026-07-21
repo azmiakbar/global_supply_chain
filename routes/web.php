@@ -36,7 +36,13 @@ Route::get('/login-admin', function () {
 });
 
 Route::get('/', function () {
-    return view('welcome');
+    if (auth()->check()) {
+        if (str_contains(strtolower(auth()->user()->email), 'admin')) {
+            return redirect()->route('admin.index');
+        }
+        return redirect()->route('dashboard');
+    }
+    return redirect()->route('login');
 });
 
 Route::get('/dashboard', [DashboardController::class, 'index'])
